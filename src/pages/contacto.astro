@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+<BaseLayout page="contact" title="Contacto / Portfolio estructura base">
+  <PageIntro index="03" marker="cierre" title="Estructura de contacto" description="Cierre reservado para datos de contacto, disponibilidad y próximos pasos. El formulario es una demostración estructural y no envía información." />
+  <section class="contact-shell" aria-labelledby="contact-title">
+    <header class="section-heading"><span>04</span><div><p>Acción final</p><h2 id="contact-title">Formulario base</h2></div></header>
+    <form class="contact-form" data-contact-form>
+      <label>Nombre<input name="name" autocomplete="name" placeholder="Campo reservado" /></label>
+      <label>Correo<input type="email" name="email" autocomplete="email" placeholder="Campo reservado" /></label>
+      <label class="full-field">Mensaje<textarea name="message" rows="5" placeholder="Campo reservado"></textarea></label>
+      <button class="primary-action" type="submit">Probar estado <span>→</span></button>
+      <p class="form-status" data-form-status aria-live="polite">Sin envío configurado en esta etapa.</p>
+    </form>
+  </section>
+</BaseLayout>

@@ -1,0 +1,25 @@
+---
+const { currentPage = 'home' } = Astro.props;
+const links = [
+  { id: 'home', label: 'Inicio', href: '/' },
+  { id: 'projects', label: 'Proyectos', href: '/proyectos' },
+  { id: 'profile', label: 'Perfil', href: '/perfil' },
+  { id: 'contact', label: 'Contacto', href: '/contacto' }
+];
+---
+<header class="site-header" data-site-header>
+  <a class="brand-placeholder" href="/" aria-label="Ir al inicio">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span>PORTFOLIO / 01</span>
+  </a>
+  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
+    Menú <span aria-hidden="true">+</span>
+  </button>
+  <nav id="primary-navigation" class="primary-navigation" aria-label="Navegación principal">
+    {links.map(link => (
+      <a href={link.href} aria-current={currentPage === link.id ? 'page' : undefined} data-nav-link={link.id}>
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>

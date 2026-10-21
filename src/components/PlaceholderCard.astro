@@ -1,0 +1,19 @@
+---
+const {
+  number = '01',
+  label = 'Bloque reservado',
+  type = 'general',
+  lines = 3
+} = Astro.props;
+---
+<article class="placeholder-card" data-placeholder-card data-type={type}>
+  <div class="placeholder-card__top"><span>{number}</span><span>{type}</span></div>
+  <div class="media-placeholder" aria-label="Espacio reservado para imagen o recurso multimedia">
+    <span>MEDIA</span>
+    <span>16:10</span>
+  </div>
+  <h2>{label}</h2>
+  <div class="text-placeholder" aria-hidden="true">
+    {Array.from({ length: lines }).map((_, index) => <span style={`--line:${92 - index * 13}%`}></span>)}
+  </div>
+</article>

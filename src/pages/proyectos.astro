@@ -1,0 +1,26 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+import PlaceholderCard from '../components/PlaceholderCard.astro';
+---
+<BaseLayout page="projects" title="Proyectos / Portfolio estructura base">
+  <PageIntro index="01" marker="archivo" title="Estructura de proyectos" description="Grilla reservada para organizar casos, categorías y niveles de profundidad sin incorporar todavía contenido real." />
+  <section class="archive-shell" aria-labelledby="archive-title">
+    <header class="section-heading"><span>02</span><div><p>Exploración básica</p><h2 id="archive-title">Archivo modular</h2></div></header>
+    <div class="filter-bar" aria-label="Filtrar placeholders por etapa">
+      <button type="button" class="filter-button is-active" data-project-filter="all" aria-pressed="true">Todos</button>
+      <button type="button" class="filter-button" data-project-filter="research" aria-pressed="false">Investigación</button>
+      <button type="button" class="filter-button" data-project-filter="design" aria-pressed="false">Diseño</button>
+      <button type="button" class="filter-button" data-project-filter="build" aria-pressed="false">Desarrollo</button>
+    </div>
+    <p class="result-status" data-project-count aria-live="polite">6 bloques visibles</p>
+    <div class="project-placeholder-grid">
+      <PlaceholderCard number="01" label="Caso de estudio" type="research" lines={3} />
+      <PlaceholderCard number="02" label="Caso de estudio" type="design" lines={3} />
+      <PlaceholderCard number="03" label="Caso de estudio" type="build" lines={3} />
+      <PlaceholderCard number="04" label="Caso de estudio" type="design" lines={3} />
+      <PlaceholderCard number="05" label="Caso de estudio" type="research" lines={3} />
+      <PlaceholderCard number="06" label="Caso de estudio" type="build" lines={3} />
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+<BaseLayout page="profile" title="Perfil / Portfolio estructura base">
+  <PageIntro index="02" marker="perfil" title="Estructura del perfil" description="Área preparada para presentar una síntesis, formación, experiencia y capacidades en una etapa posterior." />
+  <section class="profile-shell" aria-labelledby="profile-structure-title" data-profile-shell>
+    <header class="section-heading"><span>03</span><div><p>Jerarquía prevista</p><h2 id="profile-structure-title">Recorrido profesional</h2></div></header>
+    <div class="profile-layout">
+      <aside><p class="structural-label">Columna de síntesis</p><div class="portrait-placeholder"><span>RETRATO<br/>O RECURSO</span></div></aside>
+      <div class="timeline-placeholder">
+        {['Presentación','Experiencia','Formación','Herramientas'].map((item,index)=><article><span>{String(index+1).padStart(2,'0')}</span><div><h2>{item}</h2><i></i><i></i><i></i></div></article>)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
