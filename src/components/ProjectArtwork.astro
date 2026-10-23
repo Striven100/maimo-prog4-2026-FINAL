@@ -1,0 +1,42 @@
+---
+const { project, compact = false } = Astro.props;
+---
+
+<div class:list={["project-art", `project-art--${project.id}`, { "project-art--compact": compact }]} aria-hidden="true">
+  {project.id === "umbral" && (
+    <>
+      <span class="umbral-code">U/26</span>
+      <strong>UM<br />BRAL</strong>
+      <i class="umbral-line"></i>
+      <small>ARTES DIGITALES · BUENOS AIRES</small>
+    </>
+  )}
+
+  {project.id === "brasa" && (
+    <>
+      <span class="brasa-label">ORIGEN / COSECHA</span>
+      <strong>brasa<br />alta</strong>
+      <div class="brasa-cup"><i></i></div>
+      <small>CAFÉ DE ESPECIALIDAD</small>
+    </>
+  )}
+
+  {project.id === "traza" && (
+    <>
+      <span class="traza-label">03 / MOVILIDAD</span>
+      <strong>TRAZA</strong>
+      <div class="traza-map"><i></i><i></i><i></i></div>
+      <small>UN PLAN PARA CADA RITMO.</small>
+    </>
+  )}
+
+  {project.id === "nara" && (
+    <>
+      <span class="nara-label">SALUD INTEGRAL</span>
+      <strong>nara<span>+</span></strong>
+      <div class="nara-orbit"><i></i></div>
+      <small>CUIDADO · CONTINUIDAD · CONTROL</small>
+    </>
+  )}
+</div>
+

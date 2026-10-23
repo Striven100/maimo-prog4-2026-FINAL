@@ -1,0 +1,66 @@
+---
+import Icon from "./Icon.astro";
+import ProjectArtwork from "./ProjectArtwork.astro";
+
+const { project } = Astro.props;
+---
+
+<dialog class="project-dialog" id={`project-${project.id}`} data-project-dialog>
+  <div class="project-dialog__frame">
+    <header class="project-dialog__topbar">
+      <div>
+        <span>{project.number}</span>
+        <strong>Proyecto conceptual</strong>
+      </div>
+      <button type="button" class="icon-button" data-dialog-close aria-label={`Cerrar detalle de ${project.title}`}>
+        <Icon name="close" size={22} />
+      </button>
+    </header>
+
+    <div class="project-dialog__scroll">
+      <section class="project-dialog__hero">
+        <div class="project-dialog__intro">
+          <p>{project.category}</p>
+          <h2>{project.title}</h2>
+          <strong>{project.subtitle}</strong>
+          <p>{project.description}</p>
+        </div>
+        <ProjectArtwork project={project} />
+      </section>
+
+      <section class="project-dialog__facts" aria-label="Información del proyecto">
+        <article>
+          <span>01</span>
+          <h3>Desafío</h3>
+          <p>{project.challenge}</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Enfoque</h3>
+          <p>{project.focus}</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Resultado</h3>
+          <p>{project.result}</p>
+        </article>
+      </section>
+
+      <section class="project-dialog__system">
+        <div>
+          <p class="section-kicker">Sistema visual</p>
+          <h3>Herramientas y paleta</h3>
+        </div>
+        <ul class="dialog-tools">
+          {project.tools.map((tool: string) => <li>{tool}</li>)}
+        </ul>
+        <div class="palette" aria-label="Paleta de colores">
+          {project.palette.map((color: string) => (
+            <span style={`--swatch:${color}`}><i></i>{color}</span>
+          ))}
+        </div>
+      </section>
+    </div>
+  </div>
+</dialog>
+

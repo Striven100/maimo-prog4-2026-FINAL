@@ -1,59 +1,310 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { mainNavigation, projectCategories } from "../config/navigation.js";
+import Icon from "../components/Icon.astro";
+import ProjectArtwork from "../components/ProjectArtwork.astro";
+import ProjectDialog from "../components/ProjectDialog.astro";
+import {
+  profile,
+  projects,
+  services,
+  skills,
+  tools,
+  experience,
+  appliedProjects,
+  education,
+  certifications,
+  interests
+} from "../data/portfolio.js";
+
+const navItems = [
+  { id: "inicio", label: "Inicio" },
+  { id: "proyectos", label: "Proyectos" },
+  { id: "capacidades", label: "Capacidades" },
+  { id: "experiencia", label: "Experiencia" },
+  { id: "formacion", label: "Formación" },
+  { id: "contacto", label: "Contacto" }
+];
 ---
 
-<BaseLayout title="Portfolio | Estructura base">
-  <section class="home-hero">
-    <div class="home-hero__meta">
-      <span>Portfolio / Base</span>
-      <span>Versión 01</span>
-    </div>
+<BaseLayout>
+  <header class="topbar">
+    <a class="wordmark" href="#inicio" aria-label="Tobías Mislej, volver al inicio">
+      <span>TM</span>
+      <strong>Tobías Mislej</strong>
+    </a>
 
-    <h1>
-      <span>Nombre</span>
-      <span>del portfolio</span>
-    </h1>
-
-    <div class="home-hero__footer">
-      <p>Espacio reservado para una presentación breve y el enfoque profesional.</p>
-      <a href="/proyectos">Explorar estructura <span aria-hidden="true">↘</span></a>
-    </div>
-  </section>
-
-  <section class="site-map" aria-labelledby="mapa-titulo">
-    <div class="section-title">
-      <p>01 / Mapa del sitio</p>
-      <h2 id="mapa-titulo">Páginas principales</h2>
-    </div>
-
-    <div class="route-list">
-      {mainNavigation.slice(1).map((item, index) => (
-        <a href={item.href}>
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <strong>{item.label}</strong>
-          <span aria-hidden="true">→</span>
-        </a>
+    <nav class="topbar__nav" aria-label="Navegación principal">
+      {navItems.map((item) => (
+        <a href={`#${item.id}`} data-nav-link={item.id}>{item.label}</a>
       ))}
-    </div>
-  </section>
+    </nav>
 
-  <section class="category-preview" aria-labelledby="categorias-titulo">
-    <div class="section-title">
-      <p>02 / Archivo</p>
-      <h2 id="categorias-titulo">Categorías de proyectos</h2>
-    </div>
+    <a class="topbar__contact" href={`mailto:${profile.email}`}>
+      <span>Disponible</span>
+      <i aria-hidden="true"></i>
+    </a>
+  </header>
 
-    <div class="category-grid">
-      {projectCategories.map((category) => (
-        <a class="category-card" href={category.href}>
-          <span>{category.number}</span>
-          <h3>{category.title}</h3>
-          <p>{category.description}</p>
-          <b aria-hidden="true">↗</b>
-        </a>
-      ))}
-    </div>
-  </section>
+  <main id="contenido">
+    <section class="intro section-anchor" id="inicio" data-section="inicio">
+      <aside class="identity-panel">
+        <div class="identity-panel__portrait" aria-label="Monograma de Tobías Mislej">
+          <span>T</span><span>M</span>
+          <i></i>
+          <small>UX / UI<br />MULTIMEDIA</small>
+        </div>
+
+        <div class="identity-panel__status">
+          <i aria-hidden="true"></i>
+          <span>{profile.status}</span>
+        </div>
+
+        <div class="identity-panel__meta">
+          <p><Icon name="pin" size={17} /> {profile.location}</p>
+          <p><Icon name="graduation" size={17} /> Universidad Maimónides</p>
+        </div>
+
+        <div class="identity-panel__links">
+          <a href={`mailto:${profile.email}`} aria-label={`Escribir a ${profile.email}`}>
+            <Icon name="mail" size={18} /> Email <Icon name="arrow" size={16} />
+          </a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer">
+            <Icon name="linkedin" size={18} /> LinkedIn <Icon name="arrow" size={16} />
+          </a>
+        </div>
+      </aside>
+
+      <div class="intro__content">
+        <p class="section-kicker">Portfolio / 2026</p>
+        <h1>
+          Diseño experiencias<br />
+          <span>claras, útiles y memorables.</span>
+        </h1>
+        <div class="intro__summary">
+          <p>{profile.about}</p>
+          <div class="role-list" aria-label="Áreas de especialización">
+            <span>01 · UX Research</span>
+            <span>02 · Diseño de interfaces</span>
+            <span>03 · Identidad visual</span>
+            <span>04 · Front-end</span>
+          </div>
+        </div>
+
+        <div class="intro__index" aria-label="Resumen del portfolio">
+          <a href="#proyectos"><strong>04</strong><span>Casos<br />seleccionados</span></a>
+          <a href="#capacidades"><strong>13</strong><span>Servicios<br />y capacidades</span></a>
+          <a href="#experiencia"><strong>05</strong><span>Experiencias<br />profesionales</span></a>
+          <a href="#formacion"><strong>05</strong><span>Certificaciones<br />destacadas</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio-section portfolio-section--dark section-anchor" id="proyectos" data-section="proyectos">
+      <header class="section-heading section-heading--light">
+        <div>
+          <p class="section-kicker">01 / Trabajo seleccionado</p>
+          <h2>Proyectos que cambian<br />de lenguaje según el problema.</h2>
+        </div>
+        <p>Seleccioná un caso para abrir su ficha completa sin salir del portfolio.</p>
+      </header>
+
+      <div class="filter-bar" aria-label="Filtrar proyectos">
+        <button type="button" data-project-filter="all" aria-pressed="true">Todos <span>04</span></button>
+        <button type="button" data-project-filter="ux" aria-pressed="false">UX/UI <span>02</span></button>
+        <button type="button" data-project-filter="branding" aria-pressed="false">Identidad <span>04</span></button>
+        <button type="button" data-project-filter="producto" aria-pressed="false">Producto <span>01</span></button>
+      </div>
+
+      <div class="project-grid" data-project-grid>
+        {projects.map((project) => (
+          <article class="project-card" data-project-card data-project-tags={project.tags.join(" ")}>
+            <button type="button" data-dialog-open={`project-${project.id}`} aria-label={`Ver proyecto ${project.title}`}>
+              <ProjectArtwork project={project} compact />
+              <span class="project-card__meta">
+                <i>{project.number}</i>
+                <small>{project.category}</small>
+              </span>
+              <span class="project-card__title">
+                <strong>{project.title}</strong>
+                <small>{project.subtitle}</small>
+              </span>
+              <span class="project-card__summary">{project.summary}</span>
+              <span class="project-card__action">Ver caso <Icon name="arrow" size={18} /></span>
+            </button>
+          </article>
+        ))}
+      </div>
+
+      {projects.map((project) => <ProjectDialog project={project} />)}
+    </section>
+
+    <section class="portfolio-section section-anchor" id="capacidades" data-section="capacidades">
+      <header class="section-heading">
+        <div>
+          <p class="section-kicker">02 / Capacidades</p>
+          <h2>Una práctica multidisciplinaria,<br />organizada por función.</h2>
+        </div>
+        <p>Diseño, investigación, producción y tecnología reunidos en un mismo sistema de trabajo.</p>
+      </header>
+
+      <div class="capability-layout">
+        <div class="service-board">
+          <h3>Servicios</h3>
+          <div class="service-grid">
+            {services.map((service, index) => (
+              <article>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <Icon name={service.icon} size={21} />
+                <strong>{service.label}</strong>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <aside class="skill-board">
+          <div>
+            <p class="section-kicker">Skill set</p>
+            <h3>Cómo trabajo</h3>
+          </div>
+          <ol>
+            {skills.map((skill, index) => (
+              <li><span>{String(index + 1).padStart(2, "0")}</span>{skill}</li>
+            ))}
+          </ol>
+        </aside>
+      </div>
+
+      <div class="tool-board">
+        <div class="tool-board__heading">
+          <div>
+            <p class="section-kicker">Herramientas</p>
+            <h3>Entorno de producción</h3>
+          </div>
+          <p>Los niveles indican autonomía de uso dentro de proyectos personales, académicos y freelance.</p>
+        </div>
+        <div class="tool-grid">
+          {tools.map((tool) => (
+            <article>
+              <Icon name={tool.icon} size={22} />
+              <strong>{tool.name}</strong>
+              <span class:list={[{ "level--advanced": tool.level === "Avanzado" }]}>{tool.level}</span>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="portfolio-section portfolio-section--tint section-anchor" id="experiencia" data-section="experiencia">
+      <header class="section-heading">
+        <div>
+          <p class="section-kicker">03 / Experiencia</p>
+          <h2>Diseño aplicado en contextos<br />creativos, técnicos y educativos.</h2>
+        </div>
+        <p>Roles formales y colaboraciones que combinan comunicación, organización y producción.</p>
+      </header>
+
+      <div class="experience-layout">
+        <div class="timeline-list">
+          {experience.map((item, index) => (
+            <article>
+              <span class="timeline-list__number">{String(index + 1).padStart(2, "0")}</span>
+              <span class="timeline-list__icon"><Icon name={item.icon} size={22} /></span>
+              <div>
+                <p>{item.organization}</p>
+                <h3>{item.title}</h3>
+                <span>{item.description}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <aside class="applied-board">
+          <div class="applied-board__heading">
+            <p class="section-kicker">Experiencia aplicada</p>
+            <h3>Proyectos y prácticas</h3>
+          </div>
+          {appliedProjects.map((item) => (
+            <article>
+              <Icon name={item.icon} size={22} />
+              <div>
+                <h4>{item.title}</h4>
+                <p>{item.description}</p>
+                <span>{item.meta}</span>
+              </div>
+            </article>
+          ))}
+        </aside>
+      </div>
+    </section>
+
+    <section class="portfolio-section section-anchor" id="formacion" data-section="formacion">
+      <header class="section-heading">
+        <div>
+          <p class="section-kicker">04 / Formación</p>
+          <h2>Aprendizaje continuo,<br />entre producto y multimedia.</h2>
+        </div>
+        <p>Una base proyectual ampliada con diseño digital, tecnología, comunicación y docencia.</p>
+      </header>
+
+      <div class="background-grid">
+        <section class="education-board">
+          <h3>Educación</h3>
+          {education.map((item, index) => (
+            <article>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <div><h4>{item.title}</h4><p>{item.place}</p></div>
+              <small>{item.detail}</small>
+            </article>
+          ))}
+        </section>
+
+        <section class="certificate-board">
+          <h3>Certificaciones</h3>
+          <ul>
+            {certifications.map((item, index) => (
+              <li><Icon name="arrow" size={16} /><span>{item}</span><small>{String(index + 1).padStart(2, "0")}</small></li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="interest-board">
+          <div>
+            <p class="section-kicker">Intereses</p>
+            <h3>Fuera de la pantalla</h3>
+          </div>
+          <div class="interest-grid">
+            {interests.map((item) => (
+              <span><Icon name={item.icon} size={20} />{item.label}</span>
+            ))}
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="contact-section section-anchor" id="contacto" data-section="contacto">
+      <div class="contact-section__heading">
+        <p class="section-kicker">05 / Contacto</p>
+        <h2>¿Construimos algo<br />claro y útil?</h2>
+      </div>
+
+      <div class="contact-section__body">
+        <p>Estoy interesado en oportunidades de UX/UI, producto y diseño multimedia donde pueda investigar, organizar y transformar información en experiencias comprensibles.</p>
+        <div class="contact-actions">
+          <a href={`mailto:${profile.email}`}><Icon name="mail" size={20} />{profile.email}<Icon name="arrow" size={18} /></a>
+          <a href={profile.linkedin} target="_blank" rel="noreferrer"><Icon name="linkedin" size={20} />LinkedIn<Icon name="arrow" size={18} /></a>
+          <a href={`tel:${profile.phoneHref}`}><Icon name="phone" size={20} />{profile.phone}<Icon name="arrow" size={18} /></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>© 2026 Tobías Mislej</p>
+    <p>Portfolio UX/UI & Multimedia</p>
+    <a href="#inicio">Volver arriba ↑</a>
+  </footer>
+
+  <script>
+    import "../scripts/page.js";
+  </script>
 </BaseLayout>
-
