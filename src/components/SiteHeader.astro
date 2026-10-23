@@ -1,25 +1,26 @@
 ---
-const { currentPage = 'home' } = Astro.props;
-const links = [
-  { id: 'home', label: 'Inicio', href: '/' },
-  { id: 'projects', label: 'Proyectos', href: '/proyectos' },
-  { id: 'profile', label: 'Perfil', href: '/perfil' },
-  { id: 'contact', label: 'Contacto', href: '/contacto' }
-];
+import { mainNavigation } from "../config/navigation.js";
+
+const pathname = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === "/" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
 ---
-<header class="site-header" data-site-header>
-  <a class="brand-placeholder" href="/" aria-label="Ir al inicio">
-    <span class="brand-mark" aria-hidden="true"></span>
-    <span>PORTFOLIO / 01</span>
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Ir al inicio">
+    <span class="brand__mark" aria-hidden="true">P</span>
+    <span>
+      <strong>Portfolio</strong>
+      <small>Estructura base</small>
+    </span>
   </a>
-  <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-navigation">
-    Menú <span aria-hidden="true">+</span>
-  </button>
-  <nav id="primary-navigation" class="primary-navigation" aria-label="Navegación principal">
-    {links.map(link => (
-      <a href={link.href} aria-current={currentPage === link.id ? 'page' : undefined} data-nav-link={link.id}>
-        {link.label}
+
+  <nav class="primary-nav" aria-label="Navegación principal">
+    {mainNavigation.map((item) => (
+      <a href={item.href} aria-current={isCurrent(item.href) ? "page" : undefined}>
+        {item.label}
       </a>
     ))}
   </nav>
 </header>
+

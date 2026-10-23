@@ -1,8 +1,6 @@
-import { defineConfig } from 'astro/config';
-import vercel from '@astrojs/vercel';
+import { defineConfig } from "astro/config";
 
 export default defineConfig({
-  output: 'server',
-  adapter: vercel(),
-  site: 'https://tu-dominio.vercel.app'
+  output: "static"
 });
+

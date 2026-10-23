@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import { projectCategories } from "../../config/navigation.js";
+---
+
+<BaseLayout title="Proyectos | Portfolio base">
+  <PageHeader
+    eyebrow="Archivo / 02"
+    title="Proyectos"
+    description="Índice vacío para ordenar futuros casos de estudio por disciplina."
+  />
+
+  <section class="project-index" aria-label="Categorías de proyectos">
+    {projectCategories.map((category) => (
+      <a href={category.href} class="project-index__row">
+        <span>{category.number}</span>
+        <div>
+          <h2>{category.title}</h2>
+          <p>{category.description}</p>
+        </div>
+        <span aria-hidden="true">↗</span>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
+

@@ -1,0 +1,20 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "./PageHeader.astro";
+import PlaceholderSection from "./PlaceholderSection.astro";
+
+const { category, code, description } = Astro.props;
+---
+
+<BaseLayout title={`${category} | Portfolio base`} description={description}>
+  <PageHeader eyebrow={`Proyectos / ${code}`} title={category} description={description} />
+
+  <div class="content-grid content-grid--case">
+    <PlaceholderSection number="01" title="Resumen del proyecto" wide />
+    <PlaceholderSection number="02" title="Contexto y desafío" media />
+    <PlaceholderSection number="03" title="Proceso y decisiones" media />
+    <PlaceholderSection number="04" title="Solución final" media />
+    <PlaceholderSection number="05" title="Resultados y aprendizajes" wide />
+  </div>
+</BaseLayout>
+

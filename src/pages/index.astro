@@ -1,19 +1,59 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import PageIntro from '../components/PageIntro.astro';
-import PlaceholderCard from '../components/PlaceholderCard.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { mainNavigation, projectCategories } from "../config/navigation.js";
 ---
-<BaseLayout page="home" title="Inicio / Portfolio estructura base">
-  <PageIntro index="00" marker="portada" title="Título principal del portfolio" description="Espacio reservado para una presentación breve, una posición profesional y una llamada a recorrer el trabajo.">
-    <div class="intro-actions"><a class="primary-action" href="/proyectos">Recorrer estructura <span>→</span></a><button class="view-toggle" type="button" data-view-toggle aria-pressed="false">Vista índice</button></div>
-  </PageIntro>
-  <section class="structure-board" aria-labelledby="structure-title" data-structure-board data-view="map">
-    <header class="section-heading"><span>01</span><div><p>Mapa de contenido</p><h2 id="structure-title">Secuencia prevista</h2></div></header>
-    <div class="structure-grid">
-      <PlaceholderCard number="01" label="Proyecto destacado" type="caso" lines={3} />
-      <PlaceholderCard number="02" label="Proyecto secundario" type="caso" lines={2} />
-      <PlaceholderCard number="03" label="Bloque de perfil" type="perfil" lines={4} />
-      <PlaceholderCard number="04" label="Cierre y contacto" type="contacto" lines={2} />
+
+<BaseLayout title="Portfolio | Estructura base">
+  <section class="home-hero">
+    <div class="home-hero__meta">
+      <span>Portfolio / Base</span>
+      <span>Versión 01</span>
+    </div>
+
+    <h1>
+      <span>Nombre</span>
+      <span>del portfolio</span>
+    </h1>
+
+    <div class="home-hero__footer">
+      <p>Espacio reservado para una presentación breve y el enfoque profesional.</p>
+      <a href="/proyectos">Explorar estructura <span aria-hidden="true">↘</span></a>
+    </div>
+  </section>
+
+  <section class="site-map" aria-labelledby="mapa-titulo">
+    <div class="section-title">
+      <p>01 / Mapa del sitio</p>
+      <h2 id="mapa-titulo">Páginas principales</h2>
+    </div>
+
+    <div class="route-list">
+      {mainNavigation.slice(1).map((item, index) => (
+        <a href={item.href}>
+          <span>{String(index + 1).padStart(2, "0")}</span>
+          <strong>{item.label}</strong>
+          <span aria-hidden="true">→</span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="category-preview" aria-labelledby="categorias-titulo">
+    <div class="section-title">
+      <p>02 / Archivo</p>
+      <h2 id="categorias-titulo">Categorías de proyectos</h2>
+    </div>
+
+    <div class="category-grid">
+      {projectCategories.map((category) => (
+        <a class="category-card" href={category.href}>
+          <span>{category.number}</span>
+          <h3>{category.title}</h3>
+          <p>{category.description}</p>
+          <b aria-hidden="true">↗</b>
+        </a>
+      ))}
     </div>
   </section>
 </BaseLayout>
+

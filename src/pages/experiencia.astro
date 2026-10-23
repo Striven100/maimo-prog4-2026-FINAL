@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHeader from "../components/PageHeader.astro";
+---
+
+<BaseLayout title="Experiencia | Portfolio base">
+  <PageHeader
+    eyebrow="Trayectoria / 03"
+    title="Experiencia"
+    description="Línea de tiempo preparada para sumar roles, proyectos freelance y responsabilidades."
+  />
+
+  <section class="timeline" aria-label="Experiencia pendiente">
+    {["Experiencia principal", "Proyecto freelance", "Colaboración"].map((label, index) => (
+      <article>
+        <span>{String(index + 1).padStart(2, "0")}</span>
+        <div>
+          <p>Fecha / Organización / Modalidad</p>
+          <h2>{label}</h2>
+          <div class="copy-placeholder" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+        <span>Pendiente</span>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
+
