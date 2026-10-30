@@ -1,0 +1,34 @@
+---
+import ProjectArtwork from "./ProjectArtwork.astro";
+
+const { project, compact = false, eager = false } = Astro.props;
+const frames = project.gallery?.length
+  ? project.gallery
+  : project.coverImage
+    ? [{ url: project.coverImage, alt: `Portada de ${project.title}` }]
+    : [];
+---
+
+<div class:list={["project-gallery", { "project-gallery--compact": compact }]} data-project-gallery>
+  {frames.length > 0 ? (
+    <>
+      {frames.map((frame: any, index: number) => (
+        <img
+          src={frame.url}
+          alt={frame.alt || `Vista ${index + 1} de ${project.title}`}
+          class:list={["project-gallery__frame", { "is-active": index === 0 }]}
+          data-gallery-frame
+          loading={eager && index === 0 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      ))}
+      {frames.length > 1 && (
+        <span class="project-gallery__counter" aria-hidden="true">
+          <b data-gallery-current>01</b> / {String(frames.length).padStart(2, "0")}
+        </span>
+      )}
+    </>
+  ) : (
+    <ProjectArtwork project={project} compact={compact} />
+  )}
+</div>

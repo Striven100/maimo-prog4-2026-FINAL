@@ -1,20 +1,38 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
-import ProjectArtwork from "../components/ProjectArtwork.astro";
+import ProjectGallery from "../components/ProjectGallery.astro";
 import ProjectDialog from "../components/ProjectDialog.astro";
-import {
-  profile,
-  projects,
-  services,
-  skills,
-  tools,
-  experience,
-  appliedProjects,
-  education,
-  certifications,
-  interests
-} from "../data/portfolio.js";
+import { getPublicPortfolio } from "../server/portfolio.repository.js";
+
+const database = await getPublicPortfolio();
+const profile = { ...database.profile, ...database.contact };
+const projects = database.projects.filter((project: any) => project.featured).map((project: any, index: number) => ({
+  ...project,
+  number: String(index + 1).padStart(2, "0")
+}));
+const services = database.services.map((item) => ({ ...item, label: item.name }));
+const skills = database.skills.map((item) => item.name);
+const tools = database.tools;
+const experience = database.experiences.map((item) => ({
+  title: item.role,
+  organization: item.company,
+  description: item.summary,
+  icon: "briefcase"
+}));
+const appliedProjects = projects.slice(0, 4).map((item) => ({
+  title: item.title,
+  description: item.summary,
+  meta: item.tools.join(" · "),
+  icon: "layers"
+}));
+const education = database.education.map((item) => ({
+  title: item.title,
+  place: item.institution,
+  detail: [item.startDate && item.endDate ? `${item.startDate}—${item.endDate}` : item.startDate, item.description].filter(Boolean).join(" · ")
+}));
+const certifications = database.certifications.map((item) => item.title);
+const interests = database.interests.map((item) => ({ ...item, label: item.name }));
 
 const navItems = [
   { id: "inicio", label: "Inicio" },
@@ -91,10 +109,10 @@ const navItems = [
         </div>
 
         <div class="intro__index" aria-label="Resumen del portfolio">
-          <a href="#proyectos"><strong>04</strong><span>Casos<br />seleccionados</span></a>
-          <a href="#capacidades"><strong>13</strong><span>Servicios<br />y capacidades</span></a>
-          <a href="#experiencia"><strong>05</strong><span>Experiencias<br />profesionales</span></a>
-          <a href="#formacion"><strong>05</strong><span>Certificaciones<br />destacadas</span></a>
+          <a href="#proyectos"><strong>{String(projects.length).padStart(2, "0")}</strong><span>Casos<br />seleccionados</span></a>
+          <a href="#capacidades"><strong>{String(services.length).padStart(2, "0")}</strong><span>Servicios<br />y capacidades</span></a>
+          <a href="#experiencia"><strong>{String(experience.length).padStart(2, "0")}</strong><span>Experiencias<br />profesionales</span></a>
+          <a href="#formacion"><strong>{String(certifications.length).padStart(2, "0")}</strong><span>Certificaciones<br />destacadas</span></a>
         </div>
       </div>
     </section>
@@ -105,21 +123,21 @@ const navItems = [
           <p class="section-kicker">01 / Trabajo seleccionado</p>
           <h2>Proyectos que cambian<br />de lenguaje según el problema.</h2>
         </div>
-        <p>Seleccioná un caso para abrir su ficha completa sin salir del portfolio.</p>
+        <div class="section-heading__aside"><p>Seleccioná un caso para abrir su ficha completa sin salir del portfolio.</p><a href="/trabajos">Ver todos los trabajos →</a></div>
       </header>
 
       <div class="filter-bar" aria-label="Filtrar proyectos">
-        <button type="button" data-project-filter="all" aria-pressed="true">Todos <span>04</span></button>
-        <button type="button" data-project-filter="ux" aria-pressed="false">UX/UI <span>02</span></button>
-        <button type="button" data-project-filter="branding" aria-pressed="false">Identidad <span>04</span></button>
-        <button type="button" data-project-filter="producto" aria-pressed="false">Producto <span>01</span></button>
+        <button type="button" data-project-filter="all" aria-pressed="true">Todos <span>{String(projects.length).padStart(2, "0")}</span></button>
+        <button type="button" data-project-filter="ux" aria-pressed="false">UX/UI <span>{String(projects.filter((item) => item.tags.includes("ux")).length).padStart(2, "0")}</span></button>
+        <button type="button" data-project-filter="branding" aria-pressed="false">Identidad <span>{String(projects.filter((item) => item.tags.includes("branding")).length).padStart(2, "0")}</span></button>
+        <button type="button" data-project-filter="producto" aria-pressed="false">Producto <span>{String(projects.filter((item) => item.tags.includes("producto")).length).padStart(2, "0")}</span></button>
       </div>
 
-      <div class="project-grid" data-project-grid>
+      <div class="project-grid project-rail" data-project-grid>
         {projects.map((project) => (
           <article class="project-card" data-project-card data-project-tags={project.tags.join(" ")}>
             <button type="button" data-dialog-open={`project-${project.id}`} aria-label={`Ver proyecto ${project.title}`}>
-              <ProjectArtwork project={project} compact />
+              <ProjectGallery project={project} compact />
               <span class="project-card__meta">
                 <i>{project.number}</i>
                 <small>{project.category}</small>

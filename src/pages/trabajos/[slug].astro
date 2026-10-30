@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectGallery from "../../components/ProjectGallery.astro";
+import Icon from "../../components/Icon.astro";
+import { getPublicPortfolio } from "../../server/portfolio.repository.js";
+
+const { slug } = Astro.params;
+const data = await getPublicPortfolio();
+const projectIndex = data.projects.findIndex((item) => item.slug === slug);
+const project = data.projects[projectIndex];
+if (!project) return Astro.redirect("/404");
+const number = String(projectIndex + 1).padStart(2, "0");
+const resources = [
+  project.links?.live && { label: "Ver proyecto", url: project.links.live, icon: "arrow" },
+  project.links?.caseStudy && { label: "Caso de estudio", url: project.links.caseStudy, icon: "arrow" },
+  project.links?.repository && { label: "Repositorio", url: project.links.repository, icon: "code" },
+  ...(project.pdfs ?? []).map((pdf: any) => ({ label: pdf.title || pdf.name, url: pdf.url, icon: "file" }))
+].filter(Boolean);
+---
+
+<BaseLayout title={`${project.title} — Tobías Mislej`} description={project.summary}>
+  <header class="archive-topbar">
+    <a class="wordmark" href="/" aria-label="Volver al portfolio"><span>TM</span><strong>Tobías Mislej</strong></a>
+    <a href="/trabajos">← Todos los trabajos</a>
+  </header>
+
+  <main id="contenido" class="case-page">
+    <header class="case-hero">
+      <div class="case-hero__copy">
+        <p class="section-kicker">{number} / {project.category}</p>
+        <h1>{project.title}</h1>
+        <strong>{project.subtitle}</strong>
+        <p>{project.description}</p>
+      </div>
+      <ProjectGallery project={project} eager />
+    </header>
+
+    <section class="case-meta" aria-label="Ficha del proyecto">
+      <div><span>Tipo</span><strong>{project.projectType}</strong></div>
+      <div><span>Estado</span><strong>{project.status}</strong></div>
+      <div><span>Rol</span><strong>{project.role || "Diseño integral"}</strong></div>
+      <div><span>Herramientas</span><strong>{project.tools.join(" · ")}</strong></div>
+    </section>
+
+    <section class="case-story">
+      <article><span>01</span><h2>Desafío</h2><p>{project.challenge}</p></article>
+      <article><span>02</span><h2>Proceso</h2><p>{project.process}</p></article>
+      <article><span>03</span><h2>Resultado</h2><p>{project.result}</p></article>
+    </section>
+
+    {resources.length > 0 && (
+      <section class="case-resources">
+        <p class="section-kicker">Recursos</p>
+        <div>{resources.map((resource) => <a href={resource.url} target="_blank" rel="noreferrer">{resource.label}<Icon name={resource.icon} size={18} /></a>)}</div>
+      </section>
+    )}
+
+    <nav class="case-next" aria-label="Navegación entre proyectos">
+      <a href="/trabajos">Ver archivo completo</a>
+      <a href={`/trabajos/${data.projects[(projectIndex + 1) % data.projects.length].slug}`}>Siguiente proyecto →</a>
+    </nav>
+  </main>
+
+  <script>import "../../scripts/page.js";</script>
+</BaseLayout>

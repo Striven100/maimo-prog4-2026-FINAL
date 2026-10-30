@@ -1,6 +1,6 @@
 ---
 import Icon from "./Icon.astro";
-import ProjectArtwork from "./ProjectArtwork.astro";
+import ProjectGallery from "./ProjectGallery.astro";
 
 const { project } = Astro.props;
 ---
@@ -10,7 +10,7 @@ const { project } = Astro.props;
     <header class="project-dialog__topbar">
       <div>
         <span>{project.number}</span>
-        <strong>Proyecto conceptual</strong>
+        <strong>{project.projectType}</strong>
       </div>
       <button type="button" class="icon-button" data-dialog-close aria-label={`Cerrar detalle de ${project.title}`}>
         <Icon name="close" size={22} />
@@ -25,7 +25,7 @@ const { project } = Astro.props;
           <strong>{project.subtitle}</strong>
           <p>{project.description}</p>
         </div>
-        <ProjectArtwork project={project} />
+        <ProjectGallery project={project} />
       </section>
 
       <section class="project-dialog__facts" aria-label="Información del proyecto">
@@ -37,7 +37,7 @@ const { project } = Astro.props;
         <article>
           <span>02</span>
           <h3>Enfoque</h3>
-          <p>{project.focus}</p>
+          <p>{project.process || project.role}</p>
         </article>
         <article>
           <span>03</span>
@@ -49,15 +49,17 @@ const { project } = Astro.props;
       <section class="project-dialog__system">
         <div>
           <p class="section-kicker">Sistema visual</p>
-          <h3>Herramientas y paleta</h3>
+          <h3>Herramientas y enlaces</h3>
         </div>
         <ul class="dialog-tools">
           {project.tools.map((tool: string) => <li>{tool}</li>)}
         </ul>
-        <div class="palette" aria-label="Paleta de colores">
-          {project.palette.map((color: string) => (
-            <span style={`--swatch:${color}`}><i></i>{color}</span>
-          ))}
+        <div class="project-dialog__resources">
+          {project.links?.live && <a href={project.links.live} target="_blank" rel="noreferrer">Ver proyecto <Icon name="arrow" size={16} /></a>}
+          {project.links?.caseStudy && <a href={project.links.caseStudy} target="_blank" rel="noreferrer">Caso completo <Icon name="arrow" size={16} /></a>}
+          {project.links?.repository && <a href={project.links.repository} target="_blank" rel="noreferrer">Repositorio <Icon name="arrow" size={16} /></a>}
+          {project.pdfs?.map((pdf: any) => <a href={pdf.url} target="_blank" rel="noreferrer">{pdf.title || pdf.name} · PDF <Icon name="file" size={16} /></a>)}
+          <a href={`/trabajos/${project.slug}`}>Abrir página del proyecto <Icon name="arrow" size={16} /></a>
         </div>
       </section>
     </div>

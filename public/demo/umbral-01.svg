@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">UMBRAL — portada del festival</title>
+  <desc id="desc">Composición editorial negra, roja y verde ácido para un festival de artes digitales.</desc>
+  <rect width="1200" height="760" fill="#151515"/>
+  <path d="M0 94h1200M0 636h1200M94 0v760M1106 0v760" stroke="#f2ece4" opacity=".3"/>
+  <circle cx="250" cy="380" r="168" fill="none" stroke="#d8ff35" stroke-width="2"/>
+  <circle cx="250" cy="380" r="116" fill="#ff4e34"/>
+  <text x="105" y="132" fill="#f2ece4" font-family="Arial" font-size="22" letter-spacing="8">U/26 · BUENOS AIRES</text>
+  <text x="430" y="385" fill="#f2ece4" font-family="Arial" font-size="170" font-weight="800" letter-spacing="-12">UMBRAL</text>
+  <text x="438" y="448" fill="#d8ff35" font-family="Arial" font-size="25" letter-spacing="7">ARTES DIGITALES · 18—21 SEPT</text>
+  <text x="105" y="690" fill="#f2ece4" font-family="Arial" font-size="18">IDENTIDAD · PROGRAMACIÓN · ENTRADAS</text>
+</svg>

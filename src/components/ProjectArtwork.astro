@@ -38,5 +38,14 @@ const { project, compact = false } = Astro.props;
       <small>CUIDADO · CONTINUIDAD · CONTROL</small>
     </>
   )}
+
+  {!['umbral', 'brasa', 'traza', 'nara'].includes(project.id) && (
+    <>
+      <span class="generic-label">{project.category || "PROYECTO"}</span>
+      <strong>{project.title}</strong>
+      <i class="generic-line"></i>
+      <small>{project.subtitle || "CASO DE ESTUDIO"}</small>
+    </>
+  )}
 </div>
 

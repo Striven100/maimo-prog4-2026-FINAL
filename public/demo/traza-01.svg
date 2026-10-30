@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">TRAZA — movilidad urbana</title>
+  <desc id="desc">Mapa nocturno y señalética verde para una red de bicicletas compartidas.</desc>
+  <rect width="1200" height="760" fill="#071d2a"/>
+  <g stroke="#75a6a8" opacity=".35" fill="none"><path d="M-40 170c230 90 350-55 530 30s300 30 470-40 260 10 340 70"/><path d="M120 0c70 240-60 310 60 520s310 90 410 250"/><path d="M720-20c-20 210 110 330 0 500s-30 250 40 310"/><path d="M1040 0c-110 220-40 370 70 520"/></g>
+  <g fill="#b9ff32"><circle cx="180" cy="209" r="12"/><circle cx="468" cy="210" r="12"/><circle cx="730" cy="473" r="12"/><circle cx="1080" cy="203" r="12"/></g>
+  <text x="65" y="115" fill="#e7f1f2" font-family="Arial" font-size="130" font-weight="800" letter-spacing="-8">TRAZA</text>
+  <text x="75" y="168" fill="#b9ff32" font-family="Arial" font-size="20" letter-spacing="6">UN PLAN PARA CADA RITMO</text>
+  <rect x="75" y="585" width="390" height="90" fill="#b9ff32"/><text x="112" y="640" fill="#071d2a" font-family="Arial" font-size="22" font-weight="700">ENCONTRÁ TU ESTACIÓN →</text>
+  <text x="865" y="680" fill="#e7f1f2" font-family="Arial" font-size="18">MOVILIDAD / CABA / 2026</text>
+</svg>

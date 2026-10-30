@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">NARA+ — plataforma de salud</title>
+  <desc id="desc">Identidad serena en coral y azul con un círculo abierto como símbolo de continuidad.</desc>
+  <rect width="1200" height="760" fill="#fff8ef"/>
+  <circle cx="830" cy="360" r="225" fill="none" stroke="#bcd7f4" stroke-width="82" stroke-dasharray="1180 240" transform="rotate(-28 830 360)"/>
+  <circle cx="830" cy="360" r="115" fill="#f55f58"/>
+  <text x="90" y="160" fill="#262639" font-family="Arial" font-size="23" letter-spacing="6">SALUD INTEGRAL</text>
+  <text x="83" y="360" fill="#262639" font-family="Georgia" font-size="180">nara<tspan fill="#f55f58">+</tspan></text>
+  <text x="95" y="430" fill="#262639" font-family="Arial" font-size="25">Cuidado que continúa con vos.</text>
+  <path d="M95 490h430" stroke="#262639" opacity=".3"/>
+  <text x="95" y="540" fill="#262639" font-family="Arial" font-size="16" letter-spacing="4">TURNOS · INDICACIONES · REGISTROS</text>
+</svg>

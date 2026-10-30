@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Brasa Alta — catálogo digital</title>
+  <desc id="desc">Página de producto editorial con origen, notas y método de preparación.</desc>
+  <rect width="1200" height="760" fill="#231f1b"/>
+  <rect x="55" y="55" width="1090" height="650" fill="#f2e5cf"/>
+  <text x="100" y="115" fill="#231f1b" font-family="Georgia" font-size="38" font-style="italic">brasa alta</text>
+  <g transform="translate(100 170)"><rect width="430" height="465" fill="#d95f2d"/><circle cx="215" cy="192" r="110" fill="#231f1b"/><path d="M150 194c38-62 92-62 130 0-38 62-92 62-130 0Z" fill="#d5ff38"/></g>
+  <g fill="#231f1b"><text x="610" y="215" font-family="Arial" font-size="17" letter-spacing="5">HUILA / COLOMBIA</text><text x="610" y="296" font-family="Georgia" font-size="76">Lote 04</text><text x="610" y="350" font-family="Arial" font-size="21">Cacao · ciruela · panela</text><path d="M610 385h440" stroke="#231f1b" opacity=".35"/><text x="610" y="438" font-family="Arial" font-size="18">Altura</text><text x="930" y="438" font-family="Arial" font-size="18">1.860 m</text><text x="610" y="486" font-family="Arial" font-size="18">Proceso</text><text x="930" y="486" font-family="Arial" font-size="18">Lavado</text></g>
+  <rect x="610" y="560" width="440" height="62" fill="#231f1b"/><text x="745" y="600" fill="#f2e5cf" font-family="Arial" font-size="17" letter-spacing="3">DESCUBRIR EL ORIGEN →</text>
+</svg>

@@ -76,3 +76,32 @@ const sectionObserver = new IntersectionObserver(
 
 sections.forEach((section) => sectionObserver.observe(section));
 
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+document.querySelectorAll("[data-project-gallery]").forEach((gallery) => {
+  const frames = [...gallery.querySelectorAll("[data-gallery-frame]")];
+  const counter = gallery.querySelector("[data-gallery-current]");
+  if (frames.length < 2 || prefersReducedMotion.matches) return;
+
+  let activeIndex = 0;
+  let timer;
+  const showNext = () => {
+    frames[activeIndex].classList.remove("is-active");
+    activeIndex = (activeIndex + 1) % frames.length;
+    frames[activeIndex].classList.add("is-active");
+    if (counter) counter.textContent = String(activeIndex + 1).padStart(2, "0");
+  };
+  const start = () => {
+    window.clearInterval(timer);
+    timer = window.setInterval(showNext, 3400);
+  };
+  const stop = () => window.clearInterval(timer);
+
+  gallery.addEventListener("mouseenter", stop);
+  gallery.addEventListener("mouseleave", start);
+  gallery.addEventListener("focusin", stop);
+  gallery.addEventListener("focusout", start);
+  document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+  start();
+});
+

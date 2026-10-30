@@ -1,0 +1,47 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectGallery from "../../components/ProjectGallery.astro";
+import Icon from "../../components/Icon.astro";
+import { getPublicPortfolio } from "../../server/portfolio.repository.js";
+
+const data = await getPublicPortfolio();
+const projects = data.projects.map((project, index) => ({
+  ...project,
+  number: String(index + 1).padStart(2, "0")
+}));
+const categories = [...new Set(projects.map((project) => project.category))];
+---
+
+<BaseLayout title="Todos los trabajos — Tobías Mislej" description="Archivo de proyectos de UX/UI, identidad y producto de Tobías Mislej.">
+  <header class="archive-topbar">
+    <a class="wordmark" href="/" aria-label="Volver al portfolio"><span>TM</span><strong>Tobías Mislej</strong></a>
+    <a href="/">← Volver al portfolio</a>
+  </header>
+
+  <main id="contenido" class="archive-page">
+    <header class="archive-hero">
+      <p class="section-kicker">Archivo / {String(projects.length).padStart(2, "0")} casos</p>
+      <h1>Todos los<br /><em>trabajos.</em></h1>
+      <div><p>Proyectos personales, académicos y profesionales organizados para explorar cada caso con más profundidad.</p><span>{categories.join(" · ")}</span></div>
+    </header>
+
+    <section class="archive-grid" aria-label="Listado de proyectos">
+      {projects.map((project) => (
+        <article class="archive-card">
+          <a href={`/trabajos/${project.slug}`}>
+            <ProjectGallery project={project} compact />
+            <span class="archive-card__index">{project.number} / {project.category}</span>
+            <span class="archive-card__body">
+              <span><strong>{project.title}</strong><small>{project.subtitle}</small></span>
+              <Icon name="arrow" size={22} />
+            </span>
+            <p>{project.summary}</p>
+          </a>
+        </article>
+      ))}
+    </section>
+  </main>
+
+  <footer class="site-footer"><p>© 2026 Tobías Mislej</p><p>Archivo de proyectos</p><a href="/">Inicio ↑</a></footer>
+  <script>import "../../scripts/page.js";</script>
+</BaseLayout>

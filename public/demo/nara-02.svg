@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">NARA+ — panel personal</title>
+  <desc id="desc">Dashboard de salud con próximos turnos, indicaciones y estado personal.</desc>
+  <rect width="1200" height="760" fill="#262639"/>
+  <rect x="65" y="60" width="1070" height="640" rx="20" fill="#fff8ef"/>
+  <text x="105" y="124" fill="#262639" font-family="Georgia" font-size="42">nara<tspan fill="#f55f58">+</tspan></text>
+  <text x="105" y="205" fill="#262639" font-family="Arial" font-size="35" font-weight="700">Buen día, Tobías.</text>
+  <text x="105" y="243" fill="#63637a" font-family="Arial" font-size="18">Este es tu cuidado para hoy.</text>
+  <g transform="translate(105 300)"><rect width="455" height="270" rx="14" fill="#bcd7f4"/><text x="30" y="50" fill="#262639" font-family="Arial" font-size="16" letter-spacing="3">PRÓXIMO TURNO</text><text x="30" y="116" fill="#262639" font-family="Arial" font-size="32" font-weight="700">Clínica médica</text><text x="30" y="158" fill="#262639" font-family="Arial" font-size="19">Hoy · 16:30 · Consultorio 08</text><rect x="30" y="198" width="188" height="44" rx="22" fill="#262639"/><text x="62" y="226" fill="#fff8ef" font-family="Arial" font-size="14">VER DETALLE →</text></g>
+  <g transform="translate(600 300)"><rect width="490" height="122" rx="14" fill="#f55f58"/><text x="25" y="45" fill="#fff8ef" font-family="Arial" font-size="15" letter-spacing="2">INDICACIONES</text><text x="25" y="83" fill="#fff8ef" font-family="Arial" font-size="23" font-weight="700">2 acciones pendientes</text><rect y="148" width="490" height="122" rx="14" fill="#fff" stroke="#ddd8ce"/><text x="25" y="192" fill="#262639" font-family="Arial" font-size="15" letter-spacing="2">ESTADO PERSONAL</text><text x="25" y="230" fill="#262639" font-family="Arial" font-size="23" font-weight="700">¿Cómo te sentís hoy?</text></g>
+  <text x="105" y="650" fill="#63637a" font-family="Arial" font-size="15">Privacidad · accesibilidad · control de la información</text>
+</svg>

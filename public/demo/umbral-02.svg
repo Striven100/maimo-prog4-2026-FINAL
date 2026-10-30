@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">UMBRAL — agenda responsive</title>
+  <desc id="desc">Vista conceptual de programación por días, sedes y disciplinas.</desc>
+  <rect width="1200" height="760" fill="#f2ece4"/>
+  <rect x="70" y="62" width="1060" height="636" fill="#151515"/>
+  <rect x="110" y="112" width="980" height="66" fill="#d8ff35"/>
+  <text x="140" y="154" font-family="Arial" font-size="22" font-weight="700">PROGRAMACIÓN / DÍA 02</text>
+  <g fill="#f2ece4" font-family="Arial"><text x="110" y="242" font-size="74" font-weight="800">VIERNES 19</text><text x="775" y="236" font-size="18">SEDE: NAVE CENTRAL</text></g>
+  <g stroke="#f2ece4" opacity=".45"><path d="M110 286h980M110 390h980M110 494h980M110 598h980"/></g>
+  <g fill="#f2ece4" font-family="Arial" font-size="25"><text x="120" y="348">18:00</text><text x="260" y="348">PAISAJES SINTÉTICOS</text><text x="875" y="348">INSTALACIÓN</text><text x="120" y="452">20:30</text><text x="260" y="452">CUERPOS / DATOS</text><text x="875" y="452">PERFORMANCE</text><text x="120" y="556">22:00</text><text x="260" y="556">UMBRAL SONORO</text><text x="875" y="556">LIVE SET</text></g>
+  <rect x="925" y="620" width="165" height="48" fill="#ff4e34"/><text x="950" y="651" fill="#151515" font-family="Arial" font-size="16" font-weight="700">VER ENTRADAS →</text>
+</svg>

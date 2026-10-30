@@ -1,0 +1,602 @@
+{
+  "meta": {
+    "stage": "02-api-funcional",
+    "schemaVersion": 1,
+    "updatedAt": "2026-10-30T11:11:44.923Z"
+  },
+  "profile": {
+    "name": "Tobías Mislej",
+    "role": "Diseñador UX/UI & Multimedia",
+    "status": "Disponible para oportunidades UX/UI",
+    "about": "Me motiva trabajar en proyectos donde pueda mejorar experiencias existentes, organizar información de forma clara y generar productos que conecten con las necesidades reales de los usuarios. Busco seguir desarrollándome en roles vinculados a UX y producto, aportando una mirada analítica, creativa y orientada a resultados."
+  },
+  "contact": {
+    "email": "tobimislej@gmail.com",
+    "phone": "+54 9 11 2613-5693",
+    "phoneHref": "+5491126135693",
+    "linkedin": "https://ar.linkedin.com/in/tobias-mislej",
+    "location": "CABA, Argentina",
+    "availability": "Disponible para oportunidades UX/UI"
+  },
+  "projects": [
+    {
+      "id": "project-umbral",
+      "slug": "umbral",
+      "title": "UMBRAL",
+      "subtitle": "Festival de artes digitales",
+      "category": "Identidad + UX/UI",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "summary": "Sistema de identidad e interfaz para un festival de artes digitales en Buenos Aires.",
+      "description": "UMBRAL organiza programación, artistas, sedes, accesibilidad y entradas mediante una identidad modular de alto contraste. La experiencia prioriza la lectura rápida de horarios, la comparación de actividades y la continuidad entre el espacio cultural y el entorno digital.",
+      "role": "Arquitectura de información, identidad visual y diseño responsive.",
+      "challenge": "Convertir una programación extensa y cambiante en un recorrido claro, reconocible y accesible.",
+      "process": "Se organizó la información por día, sede y disciplina, y luego se construyó un sistema modular que pudiera funcionar en notebook y celular.",
+      "result": "Una experiencia editorial que permite explorar el festival sin perder contexto.",
+      "tools": [
+        "Figma",
+        "Illustrator",
+        "Prototipado"
+      ],
+      "tags": [
+        "ux",
+        "branding"
+      ],
+      "coverImage": "/demo/umbral-01.svg",
+      "gallery": [
+        {
+          "url": "/demo/umbral-01.svg",
+          "alt": "Composición editorial de UMBRAL"
+        },
+        {
+          "url": "/demo/umbral-02.svg",
+          "alt": "Sistema visual y programación de UMBRAL"
+        }
+      ],
+      "pdfs": [],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 1,
+      "createdAt": "2026-09-19T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "project-brasa-alta",
+      "slug": "brasa-alta",
+      "title": "Brasa Alta",
+      "subtitle": "Café de especialidad",
+      "category": "Branding + Web",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "summary": "Identidad y diseño web para una marca que pone en valor el origen de cada cosecha.",
+      "description": "Brasa Alta es una marca conceptual de café de especialidad que pone en valor el origen, la trazabilidad y el carácter de cada cosecha. Su identidad combina una estética editorial de fuerte contraste con una paleta intensa y un sistema visual flexible.",
+      "role": "Estrategia de marca, sistema visual y diseño de producto digital.",
+      "challenge": "Presentar variedad, procedencia y métodos de preparación sin convertir la compra en una ficha técnica fría.",
+      "process": "Se desarrolló un sistema editorial que relaciona cada producto con su territorio y método de preparación.",
+      "result": "Un catálogo digital que conecta producto, territorio y ritual mediante una navegación directa.",
+      "tools": [
+        "Figma",
+        "Illustrator",
+        "Dirección visual"
+      ],
+      "tags": [
+        "branding",
+        "web"
+      ],
+      "coverImage": "/demo/brasa-01.svg",
+      "gallery": [
+        {
+          "url": "/demo/brasa-01.svg",
+          "alt": "Portada editorial de Brasa Alta"
+        },
+        {
+          "url": "/demo/brasa-02.svg",
+          "alt": "Catálogo de café de Brasa Alta"
+        }
+      ],
+      "pdfs": [],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 2,
+      "createdAt": "2026-09-19T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "project-traza",
+      "slug": "traza",
+      "title": "TRAZA",
+      "subtitle": "Movilidad urbana",
+      "category": "Producto + Identidad",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "summary": "Identidad y diseño de producto para una red de bicicletas compartidas.",
+      "description": "TRAZA integra planificación de recorridos, estaciones y seguimiento de viajes en una experiencia de movilidad urbana. La identidad se inspira en mapas, intersecciones y señalética.",
+      "role": "Producto digital, sistema de navegación e identidad aplicada.",
+      "challenge": "Reunir decisiones de viaje, disponibilidad y planes de uso en una interfaz que funcione con rapidez en la calle.",
+      "process": "La arquitectura se construyó alrededor de recorridos, estaciones y frecuencia de uso, manteniendo continuidad con la señalización física.",
+      "result": "Un sistema modular consistente entre aplicación, señalización y puntos físicos.",
+      "tools": [
+        "Figma",
+        "Illustrator",
+        "Sistemas UI"
+      ],
+      "tags": [
+        "producto",
+        "branding"
+      ],
+      "coverImage": "/demo/traza-01.svg",
+      "gallery": [
+        {
+          "url": "/demo/traza-01.svg",
+          "alt": "Mapa e identidad de TRAZA"
+        },
+        {
+          "url": "/demo/traza-02.svg",
+          "alt": "Planes de movilidad de TRAZA"
+        }
+      ],
+      "pdfs": [],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 3,
+      "createdAt": "2026-09-19T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "project-nara",
+      "slug": "nara-plus",
+      "title": "NARA+",
+      "subtitle": "Salud y seguimiento personal",
+      "category": "UX/UI + Branding",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "summary": "Plataforma de cuidado que centraliza turnos, consultas, indicaciones y registros personales.",
+      "description": "NARA+ propone una gestión de salud clara y cercana, con privacidad, accesibilidad y control de la información por parte de cada persona. Permite agendar turnos, acceder a consultas y gestionar permisos sin convertir el cuidado en una competencia.",
+      "role": "Arquitectura de información, identidad y experiencia responsive.",
+      "challenge": "Reunir información sensible y acciones frecuentes en un entorno sereno, comprensible y no infantilizado.",
+      "process": "Se definieron niveles de privacidad, acciones frecuentes y un lenguaje visual calmado basado en continuidad y cuidado compartido.",
+      "result": "Una experiencia editorial articulada por un círculo abierto como símbolo de escucha y continuidad.",
+      "tools": [
+        "Figma",
+        "UX Writing",
+        "Prototipado"
+      ],
+      "tags": [
+        "ux",
+        "branding",
+        "salud"
+      ],
+      "coverImage": "/demo/nara-01.svg",
+      "gallery": [
+        {
+          "url": "/demo/nara-01.svg",
+          "alt": "Identidad de NARA+"
+        },
+        {
+          "url": "/demo/nara-02.svg",
+          "alt": "Panel de seguimiento de NARA+"
+        }
+      ],
+      "pdfs": [],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 4,
+      "createdAt": "2026-09-21T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "experiences": [
+    {
+      "id": "experience-uba-exactas",
+      "role": "Visualización y comunicación científica",
+      "company": "UBA Exactas",
+      "employmentType": "Freelance",
+      "workMode": "No especificado",
+      "location": "Buenos Aires, Argentina",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "summary": "Producción de piezas y visualizaciones para organizar información compleja y facilitar su comunicación.",
+      "responsibilities": [
+        "Organización visual de información",
+        "Producción de piezas de comunicación"
+      ],
+      "achievements": [],
+      "skills": [
+        "Visualización",
+        "Diseño de información"
+      ],
+      "companyUrl": "",
+      "visible": true,
+      "order": 1,
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "experience-estudio-ini",
+      "role": "Diseñador junior",
+      "company": "Estudio INI",
+      "employmentType": "Trabajo",
+      "workMode": "No especificado",
+      "location": "Buenos Aires, Argentina",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "summary": "Apoyo en diseño, desarrollo visual y organización de entregables dentro de un equipo creativo.",
+      "responsibilities": [
+        "Desarrollo visual",
+        "Organización de entregables"
+      ],
+      "achievements": [],
+      "skills": [
+        "Diseño",
+        "Trabajo en equipo"
+      ],
+      "companyUrl": "",
+      "visible": true,
+      "order": 2,
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "experience-pasto",
+      "role": "Pasantía de diseño",
+      "company": "Pasto",
+      "employmentType": "Pasantía",
+      "workMode": "No especificado",
+      "location": "Buenos Aires, Argentina",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "summary": "Experiencia de formación en un entorno de trabajo creativo, colaborativo y orientado a proyectos.",
+      "responsibilities": [
+        "Asistencia en proyectos",
+        "Colaboración con el equipo"
+      ],
+      "achievements": [],
+      "skills": [
+        "Organización",
+        "Colaboración"
+      ],
+      "companyUrl": "",
+      "visible": true,
+      "order": 3,
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "experience-preceptor",
+      "role": "Preceptor",
+      "company": "Escuela de Maestros",
+      "employmentType": "Trabajo",
+      "workMode": "Presencial",
+      "location": "CABA, Argentina",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "summary": "Seguimiento cotidiano, coordinación de información y comunicación con estudiantes y equipo docente.",
+      "responsibilities": [
+        "Seguimiento de estudiantes",
+        "Coordinación de información"
+      ],
+      "achievements": [],
+      "skills": [
+        "Organización",
+        "Comunicación"
+      ],
+      "companyUrl": "",
+      "visible": true,
+      "order": 4,
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    },
+    {
+      "id": "experience-ayudantia",
+      "role": "Ayudantía de cátedra",
+      "company": "Diseño de Interfaces · Universidad Maimónides",
+      "employmentType": "Ayudantía",
+      "workMode": "Presencial",
+      "location": "CABA, Argentina",
+      "startDate": "",
+      "endDate": "",
+      "current": false,
+      "summary": "Asistencia académica y acompañamiento de procesos de diseño en el ámbito universitario.",
+      "responsibilities": [
+        "Acompañamiento de estudiantes",
+        "Asistencia académica"
+      ],
+      "achievements": [],
+      "skills": [
+        "UX/UI",
+        "Comunicación",
+        "Docencia"
+      ],
+      "companyUrl": "",
+      "visible": true,
+      "order": 5,
+      "createdAt": "2026-10-30T00:00:00.000Z",
+      "updatedAt": "2026-10-30T00:00:00.000Z"
+    }
+  ],
+  "services": [
+    {
+      "id": "service-ux",
+      "name": "Diseño UX/UI",
+      "category": "Diseño",
+      "icon": "bezier",
+      "visible": true
+    },
+    {
+      "id": "service-research",
+      "name": "Investigación UX",
+      "category": "Investigación",
+      "icon": "search",
+      "visible": true
+    },
+    {
+      "id": "service-brand",
+      "name": "Estrategia de marca",
+      "category": "Branding",
+      "icon": "target",
+      "visible": true
+    },
+    {
+      "id": "service-front",
+      "name": "Desarrollo front-end",
+      "category": "Tecnología",
+      "icon": "code",
+      "visible": true
+    },
+    {
+      "id": "service-3d",
+      "name": "Modelado y texturizado 3D",
+      "category": "3D",
+      "icon": "cube",
+      "visible": true
+    },
+    {
+      "id": "service-multimedia",
+      "name": "Diseño multimedial integral",
+      "category": "Multimedia",
+      "icon": "layers",
+      "visible": true
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-creativity",
+      "name": "Creatividad",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    },
+    {
+      "id": "skill-critical",
+      "name": "Pensamiento crítico",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    },
+    {
+      "id": "skill-organization",
+      "name": "Organización",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    },
+    {
+      "id": "skill-autonomy",
+      "name": "Autonomía",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    },
+    {
+      "id": "skill-listening",
+      "name": "Escucha activa",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    },
+    {
+      "id": "skill-problems",
+      "name": "Resolución de problemas",
+      "category": "Blanda",
+      "level": "Avanzado",
+      "visible": true
+    }
+  ],
+  "tools": [
+    {
+      "id": "tool-figma",
+      "name": "Figma",
+      "category": "Diseño",
+      "level": "Avanzado",
+      "icon": "figma",
+      "visible": true
+    },
+    {
+      "id": "tool-illustrator",
+      "name": "Illustrator",
+      "category": "Diseño",
+      "level": "Avanzado",
+      "icon": "pen",
+      "visible": true
+    },
+    {
+      "id": "tool-photoshop",
+      "name": "Photoshop",
+      "category": "Diseño",
+      "level": "Avanzado",
+      "icon": "image",
+      "visible": true
+    },
+    {
+      "id": "tool-premiere",
+      "name": "Premiere Pro",
+      "category": "Video",
+      "level": "Avanzado",
+      "icon": "film",
+      "visible": true
+    },
+    {
+      "id": "tool-after-effects",
+      "name": "After Effects",
+      "category": "Motion",
+      "level": "Intermedio",
+      "icon": "motion",
+      "visible": true
+    },
+    {
+      "id": "tool-blender",
+      "name": "Blender",
+      "category": "3D",
+      "level": "Avanzado",
+      "icon": "cube",
+      "visible": true
+    },
+    {
+      "id": "tool-html",
+      "name": "HTML",
+      "category": "Desarrollo",
+      "level": "Intermedio",
+      "icon": "code",
+      "visible": true
+    },
+    {
+      "id": "tool-css-js",
+      "name": "CSS / JavaScript",
+      "category": "Desarrollo",
+      "level": "Avanzado",
+      "icon": "code",
+      "visible": true
+    },
+    {
+      "id": "tool-notion",
+      "name": "Notion",
+      "category": "Organización",
+      "level": "Avanzado",
+      "icon": "notion",
+      "visible": true
+    }
+  ],
+  "certifications": [
+    {
+      "id": "cert-assistant",
+      "title": "Ayudantía de cátedra",
+      "issuer": "Universidad Maimónides",
+      "date": "2025-04",
+      "url": "",
+      "description": "",
+      "visible": true
+    },
+    {
+      "id": "cert-illustrator",
+      "title": "Capacitación Illustrator",
+      "issuer": "Universidad Maimónides",
+      "date": "2024-07",
+      "url": "",
+      "description": "",
+      "visible": true
+    },
+    {
+      "id": "cert-photoshop",
+      "title": "Capacitación Photoshop",
+      "issuer": "Universidad Maimónides",
+      "date": "2024-07",
+      "url": "",
+      "description": "",
+      "visible": true
+    },
+    {
+      "id": "cert-marketing",
+      "title": "Fundamentos de Marketing Digital",
+      "issuer": "Google Digital Academy",
+      "date": "",
+      "url": "",
+      "description": "",
+      "visible": true
+    }
+  ],
+  "education": [
+    {
+      "id": "edu-umai",
+      "title": "Licenciatura en Tecnología Multimedial",
+      "institution": "Universidad Maimónides",
+      "startDate": "2023",
+      "endDate": "2026",
+      "description": "En curso",
+      "visible": true
+    },
+    {
+      "id": "edu-industrial",
+      "title": "Formación previa en Diseño Industrial",
+      "institution": "Base proyectual",
+      "startDate": "",
+      "endDate": "",
+      "description": "Diseño, procesos y desarrollo de producto",
+      "visible": true
+    },
+    {
+      "id": "edu-secondary",
+      "title": "Título secundario",
+      "institution": "Formación general",
+      "startDate": "",
+      "endDate": "",
+      "description": "Completado",
+      "visible": true
+    }
+  ],
+  "interests": [
+    {
+      "id": "interest-books",
+      "name": "Libros",
+      "icon": "book",
+      "visible": true
+    },
+    {
+      "id": "interest-comics",
+      "name": "Cómics",
+      "icon": "comic",
+      "visible": true
+    },
+    {
+      "id": "interest-podcasts",
+      "name": "Podcasts",
+      "icon": "headphones",
+      "visible": true
+    },
+    {
+      "id": "interest-rpg",
+      "name": "Juegos de rol",
+      "icon": "dice",
+      "visible": true
+    },
+    {
+      "id": "interest-writing",
+      "name": "Escritura",
+      "icon": "write",
+      "visible": true
+    }
+  ]
+}

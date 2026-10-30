@@ -1,0 +1,349 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Icon from "../components/Icon.astro";
+import { getDatabase } from "../server/portfolio.repository.js";
+import "../styles/admin.css";
+
+const database = await getDatabase();
+const adminData = JSON.stringify(database).replace(/</g, "\\u003c");
+const genericSections: any[] = [
+  {
+    key: "skills",
+    title: "Habilidades",
+    description: "Competencias blandas y metodológicas.",
+    fields: [
+      { name: "name", label: "Habilidad", required: true },
+      { name: "category", label: "Categoría" },
+      { name: "level", label: "Nivel" }
+    ]
+  },
+  {
+    key: "tools",
+    title: "Herramientas",
+    description: "Software y entorno de producción.",
+    fields: [
+      { name: "name", label: "Herramienta", required: true },
+      { name: "category", label: "Categoría" },
+      { name: "level", label: "Nivel" },
+      { name: "icon", label: "Ícono", placeholder: "figma, code, image…" }
+    ]
+  },
+  {
+    key: "services",
+    title: "Servicios",
+    description: "Capacidades que ofrecés en el portfolio.",
+    fields: [
+      { name: "name", label: "Servicio", required: true },
+      { name: "category", label: "Categoría" },
+      { name: "icon", label: "Ícono", placeholder: "bezier, search, code…" }
+    ]
+  },
+  {
+    key: "certifications",
+    title: "Certificados",
+    description: "Cursos, acreditaciones y reconocimientos.",
+    fields: [
+      { name: "title", label: "Título", required: true },
+      { name: "issuer", label: "Entidad emisora" },
+      { name: "date", label: "Fecha", type: "month" },
+      { name: "url", label: "Enlace", type: "url" },
+      { name: "description", label: "Descripción", multiline: true }
+    ]
+  },
+  {
+    key: "education",
+    title: "Educación",
+    description: "Carreras, instituciones y formación relevante.",
+    fields: [
+      { name: "title", label: "Título o carrera", required: true },
+      { name: "institution", label: "Institución", required: true },
+      { name: "startDate", label: "Inicio" },
+      { name: "endDate", label: "Finalización" },
+      { name: "description", label: "Estado o detalle", multiline: true }
+    ]
+  },
+  {
+    key: "interests",
+    title: "Intereses",
+    description: "Afinidades que completan tu perfil.",
+    fields: [
+      { name: "name", label: "Interés", required: true },
+      { name: "icon", label: "Ícono", placeholder: "book, headphones, dice…" }
+    ]
+  }
+];
+
+function recordTitle(record: any) {
+  return record.title || record.name || record.role || "Sin título";
+}
+---
+
+<BaseLayout title="Administrar portfolio — Tobías Mislej" description="Panel local para gestionar el contenido del portfolio.">
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/" aria-label="Ver portfolio">
+        <span>TM</span>
+        <div><strong>Portfolio OS</strong><small>02 / API funcional</small></div>
+      </a>
+
+      <nav class="admin-nav" aria-label="Secciones de administración">
+        <button type="button" class="is-active" data-admin-tab="summary"><Icon name="chart" size={19} />Resumen</button>
+        <button type="button" data-admin-tab="projects"><Icon name="layers" size={19} />Proyectos <span>{database.projects.length}</span></button>
+        <button type="button" data-admin-tab="experiences"><Icon name="briefcase" size={19} />Experiencia <span>{database.experiences.length}</span></button>
+        <button type="button" data-admin-tab="content"><Icon name="grid" size={19} />Otros datos</button>
+        <button type="button" data-admin-tab="identity"><Icon name="users" size={19} />Perfil y contacto</button>
+      </nav>
+
+      <div class="admin-sidebar__footer">
+        <a href="/" target="_blank">Ver portfolio <Icon name="arrow" size={15} /></a>
+        <a href="/trabajos" target="_blank">Ver trabajos <Icon name="arrow" size={15} /></a>
+      </div>
+    </aside>
+
+    <main class="admin-main" id="contenido">
+      <header class="admin-topbar">
+        <div><span class="admin-live-dot"></span><strong>Base local conectada</strong><small data-last-update>Actualizada {new Date(database.meta.updatedAt).toLocaleString("es-AR")}</small></div>
+        <button type="button" class="admin-key-button" data-key-open><Icon name="key" size={17} />Clave API</button>
+      </header>
+
+      <div class="admin-toast" role="status" aria-live="polite" data-admin-toast hidden></div>
+
+      <section class="admin-view is-active" data-admin-view="summary">
+        <header class="admin-page-heading">
+          <div><p>Panel de contenido</p><h1>Todo lo importante,<br />en un solo lugar.</h1></div>
+          <p>Administrá el contenido que alimenta el portfolio público. Los cambios realizados en local se guardan en <code>data/portfolio.json</code>.</p>
+        </header>
+
+        <div class="admin-stats">
+          <article><span>01</span><strong>{database.projects.length}</strong><p>Proyectos</p><button type="button" data-go-tab="projects">Gestionar →</button></article>
+          <article><span>02</span><strong>{database.experiences.length}</strong><p>Experiencias</p><button type="button" data-go-tab="experiences">Gestionar →</button></article>
+          <article><span>03</span><strong>{database.skills.length + database.tools.length}</strong><p>Skills + tools</p><button type="button" data-go-tab="content">Gestionar →</button></article>
+          <article><span>04</span><strong>{database.certifications.length + database.education.length}</strong><p>Formaciones</p><button type="button" data-go-tab="content">Gestionar →</button></article>
+        </div>
+
+        <div class="admin-overview-grid">
+          <section>
+            <div class="admin-block-heading"><div><span>Proyectos destacados</span><h2>Fila del portfolio</h2></div><button type="button" data-go-tab="projects">Añadir proyecto</button></div>
+            <ol class="admin-mini-list">
+              {database.projects.filter((item: any) => item.featured).slice(0, 5).map((item: any, index: number) => (
+                <li><span>{String(index + 1).padStart(2, "0")}</span><div><strong>{item.title}</strong><small>{item.category}</small></div><i class:list={{ "is-visible": item.visible }}>{item.visible ? "Visible" : "Oculto"}</i></li>
+              ))}
+            </ol>
+          </section>
+          <aside class="admin-info-card">
+            <Icon name="database" size={28} />
+            <span>Persistencia local</span>
+            <h2>JSON + archivos</h2>
+            <p>Las imágenes y los PDF se guardan en <code>public/uploads</code>. En Vercel necesitarás una base y almacenamiento persistentes para editar después del despliegue.</p>
+            <a href="/api/health" target="_blank">Comprobar API →</a>
+          </aside>
+        </div>
+      </section>
+
+      <section class="admin-view" data-admin-view="projects" hidden>
+        <header class="admin-page-heading admin-page-heading--compact">
+          <div><p>Contenido principal</p><h1>Proyectos</h1></div>
+          <p>Subí portada, múltiples imágenes y PDF. La galería pública alterna automáticamente las vistas de cada proyecto.</p>
+        </header>
+
+        <div class="admin-workspace">
+          <section class="admin-records">
+            <div class="admin-block-heading"><div><span>Publicados y borradores</span><h2>{database.projects.length} proyectos</h2></div><button type="button" data-new-record="project">+ Nuevo</button></div>
+            <div class="admin-record-list">
+              {database.projects.map((project: any, index: number) => (
+                <article class="admin-record-card">
+                  <div class="admin-record-card__thumb">{project.coverImage ? <img src={project.coverImage} alt="" /> : <span>{String(index + 1).padStart(2, "0")}</span>}</div>
+                  <div><small>{project.category}</small><strong>{project.title}</strong><span>{project.featured ? "Destacado" : "Archivo"} · {project.visible ? "Visible" : "Oculto"}</span></div>
+                  <div class="admin-record-actions"><button type="button" data-edit-project={project.id}>Editar</button><button type="button" class="is-danger" data-delete-record data-section="projects" data-id={project.id} data-name={project.title}>Eliminar</button></div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <form class="admin-form" id="project-form" data-project-form enctype="multipart/form-data">
+            <input type="hidden" name="id" />
+            <div class="admin-form__heading"><div><span data-project-form-kicker>Nuevo proyecto</span><h2 data-project-form-title>Crear ficha</h2></div><button type="button" data-form-reset="project">Limpiar</button></div>
+            <fieldset>
+              <legend>01 · Identificación</legend>
+              <label class="span-2">Título<input name="title" required placeholder="Ej. Sistema de movilidad TRAZA" /></label>
+              <label>Subtítulo<input name="subtitle" placeholder="Descripción corta" /></label>
+              <label>Slug<input name="slug" placeholder="se-completa-automaticamente" /></label>
+              <label>Categoría<input name="category" required placeholder="UX/UI + Identidad" /></label>
+              <label>Tipo<select name="projectType"><option>Proyecto personal</option><option>Proyecto profesional</option><option>Proyecto académico</option><option>Proyecto conceptual</option></select></label>
+              <label>Estado<select name="status"><option>Finalizado</option><option>En progreso</option><option>En revisión</option></select></label>
+              <label>Orden<input type="number" name="order" min="1" value="99" /></label>
+            </fieldset>
+            <fieldset>
+              <legend>02 · Historia del caso</legend>
+              <label class="span-2">Resumen<textarea name="summary" required rows="3" placeholder="Una frase clara para la tarjeta del proyecto."></textarea></label>
+              <label class="span-2">Descripción<textarea name="description" required rows="5" placeholder="Contexto, alcance y propósito del proyecto."></textarea></label>
+              <label class="span-2">Tu rol<input name="role" placeholder="Investigación, arquitectura, UI y prototipo" /></label>
+              <label>Desafío<textarea name="challenge" rows="4"></textarea></label>
+              <label>Proceso<textarea name="process" rows="4"></textarea></label>
+              <label class="span-2">Resultado<textarea name="result" rows="4"></textarea></label>
+            </fieldset>
+            <fieldset>
+              <legend>03 · Clasificación y enlaces</legend>
+              <label>Herramientas<textarea name="tools" rows="4" placeholder="Una por línea o separadas por coma"></textarea></label>
+              <label>Etiquetas<textarea name="tags" rows="4" placeholder="ux, branding, producto"></textarea></label>
+              <label>URL publicada<input type="url" name="liveUrl" placeholder="https://…" /></label>
+              <label>Repositorio<input type="url" name="repositoryUrl" placeholder="https://github.com/…" /></label>
+              <label class="span-2">Caso de estudio externo<input type="url" name="caseStudyUrl" placeholder="https://…" /></label>
+            </fieldset>
+            <fieldset>
+              <legend>04 · Imágenes y documentos</legend>
+              <label class="admin-file-field span-2"><span>Portada</span><input type="file" name="coverImage" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" /><small>JPG, PNG, WebP, GIF o SVG · máximo 8 MB</small></label>
+              <label class="admin-file-field span-2"><span>Galería</span><input type="file" name="galleryImages" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" multiple /><small>Podés seleccionar varias imágenes; se añadirán a las existentes.</small></label>
+              <label class="span-2">Descripción accesible de las imágenes<input name="galleryAlt" placeholder="Ej. Pantallas responsive del sistema de turnos" /></label>
+              <label class="admin-file-field span-2"><span>Documentos PDF</span><input type="file" name="pdfFiles" accept="application/pdf" multiple /><small>Presentaciones o casos completos · máximo 15 MB cada uno.</small></label>
+              <div class="admin-existing-files span-2" data-project-files hidden></div>
+            </fieldset>
+            <fieldset class="admin-form__settings">
+              <legend>05 · Publicación</legend>
+              <label class="admin-check"><input type="checkbox" name="featured" /><span><strong>Mostrar en la portada</strong><small>Se incluirá en la fila animada de proyectos.</small></span></label>
+              <label class="admin-check"><input type="checkbox" name="visible" checked /><span><strong>Proyecto visible</strong><small>Aparecerá en la página pública.</small></span></label>
+            </fieldset>
+            <div class="admin-form__footer"><button type="button" class="button-quiet" data-form-reset="project">Cancelar</button><button type="submit" class="button-primary"><span data-submit-label>Guardar proyecto</span><Icon name="arrow" size={18} /></button></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="admin-view" data-admin-view="experiences" hidden>
+        <header class="admin-page-heading admin-page-heading--compact">
+          <div><p>Perfil profesional</p><h1>Experiencia</h1></div>
+          <p>El formulario separa cargo, empresa, modalidad, fechas y logros para mantener la información clara y reutilizable.</p>
+        </header>
+
+        <div class="admin-workspace">
+          <section class="admin-records">
+            <div class="admin-block-heading"><div><span>Historial laboral</span><h2>{database.experiences.length} experiencias</h2></div><button type="button" data-new-record="experience">+ Nueva</button></div>
+            <div class="admin-record-list">
+              {database.experiences.map((item: any) => (
+                <article class="admin-record-card admin-record-card--text">
+                  <div class="admin-record-card__icon"><Icon name="briefcase" size={21} /></div>
+                  <div><small>{item.company}</small><strong>{item.role}</strong><span>{item.employmentType} · {item.workMode}</span></div>
+                  <div class="admin-record-actions"><button type="button" data-edit-experience={item.id}>Editar</button><button type="button" class="is-danger" data-delete-record data-section="experiences" data-id={item.id} data-name={`${item.role} en ${item.company}`}>Eliminar</button></div>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <form class="admin-form" id="experience-form" data-experience-form>
+            <input type="hidden" name="id" />
+            <div class="admin-form__heading"><div><span data-experience-form-kicker>Nueva experiencia</span><h2 data-experience-form-title>Completar perfil</h2></div><button type="button" data-form-reset="experience">Limpiar</button></div>
+            <fieldset>
+              <legend>01 · Puesto y empresa</legend>
+              <label class="span-2">Puesto o rol<input name="role" required placeholder="Ej. Diseñador UX/UI junior" /></label>
+              <label class="span-2">Empresa u organización<input name="company" required placeholder="Nombre de la organización" /></label>
+              <label>Tipo de empleo<select name="employmentType"><option>Tiempo completo</option><option>Medio tiempo</option><option>Freelance</option><option>Pasantía</option><option>Contrato</option><option>Voluntariado</option><option>No especificado</option></select></label>
+              <label>Modalidad<select name="workMode"><option>Presencial</option><option>Híbrido</option><option>Remoto</option><option>No especificado</option></select></label>
+              <label class="span-2">Ubicación<input name="location" placeholder="Ciudad, país" /></label>
+            </fieldset>
+            <fieldset>
+              <legend>02 · Período</legend>
+              <label>Fecha de inicio<input type="month" name="startDate" /></label>
+              <label>Fecha de finalización<input type="month" name="endDate" data-end-date /></label>
+              <label class="admin-check span-2"><input type="checkbox" name="current" data-current-role /><span><strong>Actualmente trabajo aquí</strong><small>La fecha de finalización quedará vacía.</small></span></label>
+            </fieldset>
+            <fieldset>
+              <legend>03 · Aporte profesional</legend>
+              <label class="span-2">Descripción breve<textarea name="summary" required rows="4" placeholder="Explicá el propósito del rol y tu aporte principal."></textarea></label>
+              <label>Responsabilidades<textarea name="responsibilities" rows="6" placeholder="Una por línea&#10;Ej. Organización de entregables"></textarea></label>
+              <label>Logros<textarea name="achievements" rows="6" placeholder="Uno por línea&#10;Preferí resultados concretos"></textarea></label>
+              <label>Habilidades utilizadas<textarea name="skills" rows="5" placeholder="Figma, coordinación, investigación…"></textarea></label>
+              <label>Web de la empresa<input type="url" name="companyUrl" placeholder="https://…" /></label>
+            </fieldset>
+            <fieldset class="admin-form__settings">
+              <legend>04 · Publicación</legend>
+              <label>Orden<input type="number" name="order" min="1" value="99" /></label>
+              <label class="admin-check"><input type="checkbox" name="visible" checked /><span><strong>Experiencia visible</strong><small>Se mostrará en la línea profesional.</small></span></label>
+            </fieldset>
+            <div class="admin-form__footer"><button type="button" class="button-quiet" data-form-reset="experience">Cancelar</button><button type="submit" class="button-primary"><span data-submit-label>Guardar experiencia</span><Icon name="arrow" size={18} /></button></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="admin-view" data-admin-view="content" hidden>
+        <header class="admin-page-heading admin-page-heading--compact">
+          <div><p>Datos complementarios</p><h1>Otros datos</h1></div>
+          <p>Gestión liviana para habilidades, herramientas, servicios, certificados, educación e intereses.</p>
+        </header>
+
+        <div class="admin-generic-stack">
+          {genericSections.map((section, sectionIndex) => (
+            <details class="admin-generic" open={sectionIndex === 0}>
+              <summary><span>{String(sectionIndex + 1).padStart(2, "0")}</span><div><strong>{section.title}</strong><small>{section.description}</small></div><i>{database[section.key].length}</i></summary>
+              <div class="admin-generic__content">
+                <div class="admin-chip-list">
+                  {database[section.key].map((record: any) => (
+                    <article><div><strong>{recordTitle(record)}</strong><small>{record.category || record.issuer || record.institution || record.level || "Sin categoría"}</small></div><span>{record.visible ? "Visible" : "Oculto"}</span><button type="button" data-edit-generic data-section={section.key} data-id={record.id}>Editar</button><button type="button" class="is-danger" data-delete-record data-section={section.key} data-id={record.id} data-name={recordTitle(record)}>Eliminar</button></article>
+                  ))}
+                </div>
+                <form class="admin-generic-form" data-generic-form={section.key}>
+                  <input type="hidden" name="id" />
+                  <h3><span data-generic-form-mode>Nuevo</span> · {section.title}</h3>
+                  <div class="admin-generic-form__grid">
+                    {section.fields.map((field: any) => (
+                      <label class:list={{ "span-2": field.multiline }}>{field.label}
+                        {field.multiline
+                          ? <textarea name={field.name} rows="3"></textarea>
+                          : <input name={field.name} type={field.type || "text"} required={field.required} placeholder={field.placeholder} />}
+                      </label>
+                    ))}
+                    <label>Orden<input type="number" name="order" min="1" value="99" /></label>
+                    <label class="admin-check"><input type="checkbox" name="visible" checked /><span><strong>Visible</strong><small>Mostrar en el portfolio.</small></span></label>
+                  </div>
+                  <div class="admin-form__footer"><button type="button" class="button-quiet" data-reset-generic={section.key}>Cancelar</button><button type="submit" class="button-primary">Guardar</button></div>
+                </form>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <section class="admin-view" data-admin-view="identity" hidden>
+        <header class="admin-page-heading admin-page-heading--compact">
+          <div><p>Información base</p><h1>Perfil y contacto</h1></div>
+          <p>Datos de presentación y vías de contacto reutilizados en la portada y el cierre del portfolio.</p>
+        </header>
+
+        <div class="admin-dual-forms">
+          <form class="admin-form" data-profile-form>
+            <div class="admin-form__heading"><div><span>Identidad</span><h2>Perfil profesional</h2></div></div>
+            <fieldset>
+              <label>Nombre<input name="name" required value={database.profile.name} /></label>
+              <label>Rol profesional<input name="role" required value={database.profile.role} /></label>
+              <label class="span-2">Estado<input name="status" value={database.profile.status} /></label>
+              <label class="span-2">Sobre mí<textarea name="about" required rows="8">{database.profile.about}</textarea></label>
+            </fieldset>
+            <div class="admin-form__footer"><button type="submit" class="button-primary">Guardar perfil <Icon name="arrow" size={18} /></button></div>
+          </form>
+
+          <form class="admin-form" data-contact-form>
+            <div class="admin-form__heading"><div><span>Canales</span><h2>Contacto</h2></div></div>
+            <fieldset>
+              <label>Email<input type="email" name="email" value={database.contact.email} /></label>
+              <label>Teléfono visible<input name="phone" value={database.contact.phone} /></label>
+              <label>Teléfono para enlace<input name="phoneHref" value={database.contact.phoneHref} /></label>
+              <label>LinkedIn<input type="url" name="linkedin" value={database.contact.linkedin} /></label>
+              <label>Ubicación<input name="location" value={database.contact.location} /></label>
+              <label>Disponibilidad<input name="availability" value={database.contact.availability} /></label>
+            </fieldset>
+            <div class="admin-form__footer"><button type="submit" class="button-primary">Guardar contacto <Icon name="arrow" size={18} /></button></div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="admin-key-dialog" data-key-dialog>
+    <form method="dialog">
+      <div><span>Seguridad</span><h2>Clave de administración</h2><p>En local puede quedar vacía. Si configurás <code>PORTFOLIO_ADMIN_KEY</code>, guardá aquí el mismo valor; solo se conserva durante esta sesión del navegador.</p></div>
+      <label>Clave API<input type="password" autocomplete="off" data-key-input /></label>
+      <footer><button value="cancel" class="button-quiet">Cancelar</button><button value="default" class="button-primary" data-key-save>Guardar clave</button></footer>
+    </form>
+  </dialog>
+
+  <script id="admin-data" type="application/json" set:html={adminData}></script>
+  <script>import "../scripts/admin.js";</script>
+</BaseLayout>

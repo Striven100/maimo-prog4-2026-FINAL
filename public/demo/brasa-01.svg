@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">Brasa Alta — identidad de café</title>
+  <desc id="desc">Composición cálida con empaque naranja y tipografía editorial.</desc>
+  <rect width="1200" height="760" fill="#f2e5cf"/>
+  <text x="70" y="105" fill="#231f1b" font-family="Georgia" font-size="22" letter-spacing="5">ORIGEN / COSECHA / RITUAL</text>
+  <text x="68" y="235" fill="#231f1b" font-family="Georgia" font-size="116" font-style="italic">brasa alta</text>
+  <path d="M78 290h560" stroke="#231f1b"/>
+  <text x="75" y="344" fill="#231f1b" font-family="Arial" font-size="18">CAFÉ DE ESPECIALIDAD · COLOMBIA · 1.860 M</text>
+  <g transform="translate(760 88)"><path d="M40 0h260l38 544H0z" fill="#d95f2d"/><circle cx="170" cy="200" r="92" fill="#231f1b"/><path d="M114 202c32-54 80-54 112 0-32 54-80 54-112 0Z" fill="#d5ff38"/><text x="70" y="375" fill="#f2e5cf" font-family="Georgia" font-size="49" font-style="italic">brasa</text><text x="85" y="430" fill="#f2e5cf" font-family="Arial" font-size="17" letter-spacing="7">ALTA</text></g>
+  <text x="75" y="690" fill="#231f1b" font-family="Arial" font-size="16">IDENTIDAD · E-COMMERCE · PACKAGING</text>
+</svg>
