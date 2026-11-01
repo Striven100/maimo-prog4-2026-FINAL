@@ -1,11 +1,12 @@
-import { apiError, assertWriteAccess, json } from "../../../server/http.js";
+import { apiError, assertAdminAccess, assertWriteAccess, json } from "../../../server/http.js";
 import { insertRecord, listRecords } from "../../../server/portfolio.repository.js";
 import { normalizeProject } from "../../../server/record.normalizers.js";
 
 export const prerender = false;
 
-export async function GET() {
+export async function GET({ request }) {
   try {
+    assertAdminAccess(request);
     return json({ ok: true, data: await listRecords("projects") });
   } catch (error) {
     return apiError(error);

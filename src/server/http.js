@@ -1,3 +1,7 @@
+import { createHmac, timingSafeEqual } from "node:crypto";
+
+const ADMIN_COOKIE = "portfolio_admin_session";
+
 export class ApiError extends Error {
   constructor(status, message, details = null) {
     super(message);
@@ -7,13 +11,15 @@ export class ApiError extends Error {
   }
 }
 
-export function json(data, status = 200) {
+export function json(data, status = 200, extraHeaders = {}) {
+  const headers = new Headers({
+    "content-type": "application/json; charset=utf-8",
+    "cache-control": "no-store"
+  });
+  Object.entries(extraHeaders).forEach(([name, value]) => headers.set(name, value));
   return new Response(JSON.stringify(data, null, 2), {
     status,
-    headers: {
-      "content-type": "application/json; charset=utf-8",
-      "cache-control": "no-store"
-    }
+    headers
   });
 }
 
@@ -75,8 +81,60 @@ export function slugify(value) {
     .slice(0, 72);
 }
 
-export function assertWriteAccess(request) {
-  const configuredKey = process.env.PORTFOLIO_ADMIN_KEY?.trim();
+function configuredAdminKey() {
+  return (process.env.PORTFOLIO_ADMIN_KEY || import.meta.env?.PORTFOLIO_ADMIN_KEY || "").trim();
+}
+
+function safeEqual(left, right) {
+  const a = Buffer.from(String(left));
+  const b = Buffer.from(String(right));
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
+function sessionToken(key) {
+  return createHmac("sha256", key).update("portfolio-admin-session-v1").digest("hex");
+}
+
+function cookieValue(request, name) {
+  const cookie = request.headers.get("cookie") || "";
+  for (const part of cookie.split(";")) {
+    const [key, ...value] = part.trim().split("=");
+    if (key === name) return decodeURIComponent(value.join("="));
+  }
+  return "";
+}
+
+export function isAdminConfigured() {
+  return Boolean(configuredAdminKey());
+}
+
+export function verifyAdminKey(candidate) {
+  const key = configuredAdminKey();
+  return Boolean(key && candidate && safeEqual(candidate, key));
+}
+
+export function hasAdminSession(request) {
+  const key = configuredAdminKey();
+  const isProduction = process.env.NODE_ENV === "production";
+  if (!key && !isProduction) return true;
+  if (!key) return false;
+  return safeEqual(cookieValue(request, ADMIN_COOKIE), sessionToken(key));
+}
+
+export function createAdminSessionCookie() {
+  const key = configuredAdminKey();
+  if (!key) throw new ApiError(503, "Configurá PORTFOLIO_ADMIN_KEY en Vercel antes de iniciar sesión.");
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${ADMIN_COOKIE}=${sessionToken(key)}; Path=/; HttpOnly; SameSite=Strict; Max-Age=28800${secure}`;
+}
+
+export function clearAdminSessionCookie() {
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  return `${ADMIN_COOKIE}=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0${secure}`;
+}
+
+export function assertAdminAccess(request) {
+  const configuredKey = configuredAdminKey();
   const isProduction = process.env.NODE_ENV === "production";
 
   if (!configuredKey && !isProduction) return;
@@ -87,10 +145,12 @@ export function assertWriteAccess(request) {
     );
   }
 
-  if (request.headers.get("x-admin-key") !== configuredKey) {
+  if (!verifyAdminKey(request.headers.get("x-admin-key")) && !hasAdminSession(request)) {
     throw new ApiError(401, "Clave de administración incorrecta.");
   }
 }
+
+export const assertWriteAccess = assertAdminAccess;
 
 export async function readJson(request) {
   const contentType = request.headers.get("content-type") ?? "";
@@ -104,3 +164,4 @@ export async function readJson(request) {
     throw new ApiError(400, "El cuerpo JSON no es válido.");
   }
 }
+

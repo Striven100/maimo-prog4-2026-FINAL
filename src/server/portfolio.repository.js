@@ -1,11 +1,6 @@
 import { randomUUID } from "node:crypto";
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
-import path from "node:path";
 import { ApiError, slugify } from "./http.js";
-
-const DATA_FILE = process.env.PORTFOLIO_DATA_FILE
-  ? path.resolve(process.env.PORTFOLIO_DATA_FILE)
-  : path.join(process.cwd(), "data", "portfolio.json");
+import { DATA_FILE, getStorageStatus, readDatabaseState, writeDatabaseState } from "./storage.service.js";
 
 const COLLECTIONS = new Set([
   "projects",
@@ -28,17 +23,6 @@ function byOrder(items = []) {
   return [...items].sort((a, b) => (a.order ?? 999) - (b.order ?? 999));
 }
 
-async function writeDatabase(database) {
-  await mkdir(path.dirname(DATA_FILE), { recursive: true });
-  const temporaryFile = `${DATA_FILE}.${process.pid}.${Date.now()}.tmp`;
-  database.meta = {
-    ...database.meta,
-    updatedAt: new Date().toISOString()
-  };
-  await writeFile(temporaryFile, `${JSON.stringify(database, null, 2)}\n`, "utf8");
-  await rename(temporaryFile, DATA_FILE);
-}
-
 function queueMutation(callback) {
   const next = mutationQueue.then(callback, callback);
   mutationQueue = next.catch(() => undefined);
@@ -46,13 +30,7 @@ function queueMutation(callback) {
 }
 
 export async function getDatabase() {
-  try {
-    return JSON.parse(await readFile(DATA_FILE, "utf8"));
-  } catch (error) {
-    if (error?.code === "ENOENT") throw new ApiError(500, "No se encontró data/portfolio.json.");
-    if (error instanceof SyntaxError) throw new ApiError(500, "data/portfolio.json contiene JSON inválido.");
-    throw error;
-  }
+  return (await readDatabaseState()).database;
 }
 
 export async function getPublicPortfolio() {
@@ -92,7 +70,7 @@ export async function getRecord(section, idOrSlug) {
 export async function insertRecord(section, input) {
   ensureCollection(section);
   return queueMutation(async () => {
-    const database = await getDatabase();
+    const { database, etag } = await readDatabaseState();
     const now = new Date().toISOString();
     const base = slugify(input.slug || input.title || input.role || input.name || section) || section;
     const record = {
@@ -107,7 +85,7 @@ export async function insertRecord(section, input) {
     }
 
     database[section] = [...(database[section] ?? []), record];
-    await writeDatabase(database);
+    await writeDatabaseState(database, etag);
     return record;
   });
 }
@@ -115,7 +93,7 @@ export async function insertRecord(section, input) {
 export async function updateRecord(section, id, input) {
   ensureCollection(section);
   return queueMutation(async () => {
-    const database = await getDatabase();
+    const { database, etag } = await readDatabaseState();
     const index = (database[section] ?? []).findIndex((item) => item.id === id);
     if (index === -1) throw new ApiError(404, "No se encontró el registro solicitado.");
 
@@ -135,7 +113,7 @@ export async function updateRecord(section, id, input) {
       updatedAt: new Date().toISOString()
     };
     database[section][index] = record;
-    await writeDatabase(database);
+    await writeDatabaseState(database, etag);
     return record;
   });
 }
@@ -143,11 +121,11 @@ export async function updateRecord(section, id, input) {
 export async function deleteRecord(section, id) {
   ensureCollection(section);
   return queueMutation(async () => {
-    const database = await getDatabase();
+    const { database, etag } = await readDatabaseState();
     const index = (database[section] ?? []).findIndex((item) => item.id === id);
     if (index === -1) throw new ApiError(404, "No se encontró el registro solicitado.");
     const [removed] = database[section].splice(index, 1);
-    await writeDatabase(database);
+    await writeDatabaseState(database, etag);
     return removed;
   });
 }
@@ -157,11 +135,11 @@ export async function updateSingleton(section, input) {
     throw new ApiError(404, "La sección solicitada no existe.");
   }
   return queueMutation(async () => {
-    const database = await getDatabase();
+    const { database, etag } = await readDatabaseState();
     database[section] = { ...database[section], ...input };
-    await writeDatabase(database);
+    await writeDatabaseState(database, etag);
     return database[section];
   });
 }
 
-export { COLLECTIONS, DATA_FILE };
+export { COLLECTIONS, DATA_FILE, getStorageStatus };

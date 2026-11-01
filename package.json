@@ -1,6 +1,6 @@
 {
   "name": "tobias-mislej-portfolio",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/vercel": "^8.2.7",
+    "@vercel/blob": "^2.6.1",
     "astro": "^5.15.3"
   },
   "devDependencies": {

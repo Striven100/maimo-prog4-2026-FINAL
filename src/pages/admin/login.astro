@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Icon from "../../components/Icon.astro";
+import { hasAdminSession, isAdminConfigured } from "../../server/http.js";
+import { getStorageStatus } from "../../server/portfolio.repository.js";
+import "../../styles/admin.css";
+
+if (hasAdminSession(Astro.request)) return Astro.redirect("/admin");
+
+const configured = isAdminConfigured();
+const storage = getStorageStatus();
+---
+
+<BaseLayout title="Acceso al administrador — Tobías Mislej" description="Acceso privado al administrador del portfolio.">
+  <main class="admin-login" id="contenido">
+    <a class="admin-login__brand" href="/"><span>TM</span><strong>Portfolio OS</strong></a>
+
+    <section class="admin-login__panel">
+      <div class="admin-login__intro">
+        <p>Área privada / 02</p>
+        <h1>Administrar<br /><em>portfolio.</em></h1>
+        <p>Iniciá sesión para crear proyectos, actualizar tu experiencia y publicar imágenes o documentos directamente desde la web.</p>
+      </div>
+
+      <div class="admin-login__form-area">
+        <div class="admin-login__status">
+          <span class:list={["admin-login__dot", { "is-ready": configured }]}></span>
+          <div><strong>{configured ? "Acceso configurado" : "Configuración pendiente"}</strong><small>{storage.configured ? "Vercel Blob conectado" : "Falta conectar Vercel Blob"}</small></div>
+        </div>
+
+        {!configured && (
+          <aside class="admin-setup-notice">
+            <strong>Antes del primer acceso</strong>
+            <ol>
+              <li>Creá la variable <code>PORTFOLIO_ADMIN_KEY</code> en Vercel.</li>
+              <li>Creá un almacenamiento <strong>Blob público</strong> y conectalo al proyecto.</li>
+              <li>Volvé a desplegar el sitio.</li>
+            </ol>
+          </aside>
+        )}
+
+        <form class="admin-login__form" data-admin-login>
+          <label>Clave de administración
+            <input type="password" name="key" autocomplete="current-password" required placeholder="Ingresá tu clave privada" />
+          </label>
+          <p class="admin-login__error" data-login-error role="alert" hidden></p>
+          <button type="submit" class="button-primary" disabled={!configured}>
+            Entrar al panel <Icon name="arrow" size={18} />
+          </button>
+        </form>
+
+        <a class="admin-login__back" href="/">← Volver al portfolio</a>
+      </div>
+    </section>
+  </main>
+  <script>import "../../scripts/login.js";</script>
+</BaseLayout>

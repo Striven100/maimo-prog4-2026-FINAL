@@ -1,10 +1,10 @@
 # Portfolio de Tobías Mislej · etapa 02
 
-Portfolio UX/UI construido con Astro y una API CRUD local. La interfaz pública se alimenta desde una base JSON, incluye una fila de proyectos con imágenes en transición, un archivo de trabajos y páginas de detalle. El panel `/admin` permite crear, ver, editar y eliminar contenido sin tocar el código.
+Portfolio UX/UI construido con Astro y una API CRUD. La interfaz pública incluye una fila de proyectos con imágenes en transición, un archivo de trabajos y páginas de detalle. El panel privado `/admin` permite crear, ver, editar y eliminar contenido sin tocar el código, tanto en local como desde el sitio publicado en Vercel.
 
 ## Funciones principales
 
-- Panel local en `/admin` con navegación por categorías.
+- Panel privado en `/admin` con navegación por categorías.
 - CRUD completo para proyectos y experiencia laboral.
 - Carga de portada, múltiples imágenes y documentos PDF.
 - Formulario de experiencia con puesto, empresa, tipo, modalidad, período, responsabilidades, logros y habilidades.
@@ -13,6 +13,8 @@ Portfolio UX/UI construido con Astro y una API CRUD local. La interfaz pública 
 - Página `/trabajos` con todos los casos y ruta `/trabajos/[slug]` para cada proyecto.
 - API pública filtrada en `/api/portfolio` y diagnóstico en `/api/health`.
 - Escrituras atómicas para reducir el riesgo de corromper el JSON.
+- Persistencia productiva de datos, imágenes y PDF mediante Vercel Blob.
+- Sesión de administración protegida por una cookie `HttpOnly`, `SameSite=Strict` y firmada con la clave privada.
 - Diseño responsive para notebook y celular, con estados de foco y reducción de movimiento.
 
 ## Ejecutar en local
@@ -48,7 +50,7 @@ public/uploads/images
 public/uploads/pdfs
 ```
 
-Las imágenes aceptadas son JPG, PNG, WebP, GIF y SVG, con un máximo de 8 MB por archivo. Los PDF admiten hasta 15 MB por archivo. Los archivos generados dentro de `public/uploads` están excluidos de Git para evitar publicar material privado o pesado por accidente.
+Las imágenes aceptadas son JPG, PNG, WebP, GIF y SVG. Imágenes y PDF admiten hasta 4 MB por archivo. Los archivos generados dentro de `public/uploads` están excluidos de Git para evitar publicar material privado o pesado por accidente.
 
 ## Rutas de la API
 
@@ -67,27 +69,31 @@ Las imágenes aceptadas son JPG, PNG, WebP, GIF y SVG, con un máximo de 8 MB po
 
 Las secciones secundarias válidas son `skills`, `tools`, `services`, `certifications`, `education` e `interests`.
 
-## Clave de administración
+## Administración en local
 
-En desarrollo local las escrituras funcionan sin clave. Podés probar el mismo control de acceso creando un archivo `.env` basado en `.env.example`:
+En desarrollo local las escrituras funcionan sin clave. Podés probar el mismo acceso protegido creando un archivo `.env` basado en `.env.example`:
 
 ```text
 PORTFOLIO_ADMIN_KEY=una-clave-larga-y-segura
 ```
 
-Después, abrí **Clave API** dentro de `/admin` e ingresá el mismo valor. La clave se conserva solamente en `sessionStorage` durante la sesión actual del navegador.
+Después abrí `/admin`, ingresá la clave y usá el panel normalmente. La clave se envía una sola vez para crear una sesión; no se guarda en el código ni queda disponible para JavaScript.
 
-## Importante para Vercel
+## Habilitar la edición desde Vercel
 
-La lectura del portfolio funciona al desplegar esta etapa, pero el sistema de escritura está diseñado para desarrollo local. El filesystem de una función de Vercel no es una base persistente: un cambio puede fallar o desaparecer al reiniciar o volver a desplegar.
+Vercel no permite conservar cambios en el filesystem de una función. Por eso, en producción la API guarda la base, las imágenes y los PDF en un almacenamiento Blob conectado al proyecto.
 
-Para una futura etapa productiva, reemplazá:
+Configuración única:
 
-- `data/portfolio.json` por una base persistente como PostgreSQL, Turso, Neon o Vercel Postgres.
-- `public/uploads` por un almacenamiento de objetos como Vercel Blob, Cloudflare R2 o S3.
-- La clave compartida por autenticación real con sesiones y roles.
+1. En el proyecto correcto de Vercel, abrí **Storage** y creá un almacenamiento **Blob público**.
+2. Conectalo a los entornos donde quieras editar: como mínimo **Production**; también **Preview** si lo necesitás.
+3. En **Settings → Environment Variables**, agregá `PORTFOLIO_ADMIN_KEY` con una clave larga y privada para esos mismos entornos.
+4. Volvé a desplegar el proyecto para que el despliegue reciba las variables.
+5. Abrí `https://tu-dominio.vercel.app/admin`, iniciá sesión y entrá en **Proyectos → + Nuevo**.
 
-No publiques `/admin` como herramienta de edición hasta completar esa migración.
+El primer cambio crea automáticamente `portfolio-data/portfolio.json` en Blob a partir de los datos incluidos en el despliegue. Las cargas quedan en `uploads/images` y `uploads/pdfs`. El portfolio público refleja los cambios sin modificar GitHub ni volver a desplegar.
+
+> El almacenamiento debe ser público porque sus imágenes y PDF se muestran directamente en el portfolio. La administración y las rutas CRUD siguen protegidas por la sesión privada.
 
 ## Verificar y compilar
 

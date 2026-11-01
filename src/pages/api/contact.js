@@ -1,10 +1,11 @@
-import { apiError, assertWriteAccess, cleanText, json, readJson } from "../../server/http.js";
+import { apiError, assertAdminAccess, assertWriteAccess, cleanText, json, readJson } from "../../server/http.js";
 import { getDatabase, updateSingleton } from "../../server/portfolio.repository.js";
 
 export const prerender = false;
 
-export async function GET() {
+export async function GET({ request }) {
   try {
+    assertAdminAccess(request);
     return json({ ok: true, data: (await getDatabase()).contact });
   } catch (error) {
     return apiError(error);

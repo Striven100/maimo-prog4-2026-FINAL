@@ -13,14 +13,8 @@ function notify(message, type = "success") {
   }, 4500);
 }
 
-function adminKey() {
-  return sessionStorage.getItem("portfolio-admin-key") || "";
-}
-
 async function apiFetch(url, options = {}) {
   const headers = new Headers(options.headers || {});
-  const key = adminKey();
-  if (key) headers.set("x-admin-key", key);
 
   const response = await fetch(url, { ...options, headers });
   let payload;
@@ -320,15 +314,11 @@ document.querySelector("[data-contact-form]")?.addEventListener("submit", (event
   submitSingleton(event.currentTarget, "/api/contact", "Contacto actualizado correctamente.");
 });
 
-const keyDialog = document.querySelector("[data-key-dialog]");
-const keyInput = document.querySelector("[data-key-input]");
-document.querySelector("[data-key-open]")?.addEventListener("click", () => {
-  keyInput.value = adminKey();
-  keyDialog.showModal();
-});
-document.querySelector("[data-key-save]")?.addEventListener("click", () => {
-  const value = keyInput.value.trim();
-  if (value) sessionStorage.setItem("portfolio-admin-key", value);
-  else sessionStorage.removeItem("portfolio-admin-key");
-  notify(value ? "Clave guardada para esta sesión." : "Clave local eliminada.");
+document.querySelector("[data-admin-logout]")?.addEventListener("click", async () => {
+  try {
+    await apiFetch("/api/admin/session", { method: "DELETE" });
+    location.href = "/admin/login";
+  } catch (error) {
+    notify(error.message, "error");
+  }
 });

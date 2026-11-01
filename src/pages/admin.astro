@@ -1,10 +1,14 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
-import { getDatabase } from "../server/portfolio.repository.js";
+import { hasAdminSession } from "../server/http.js";
+import { getDatabase, getStorageStatus } from "../server/portfolio.repository.js";
 import "../styles/admin.css";
 
+if (!hasAdminSession(Astro.request)) return Astro.redirect("/admin/login");
+
 const database = await getDatabase();
+const storage = getStorageStatus();
 const adminData = JSON.stringify(database).replace(/</g, "\\u003c");
 const genericSections: any[] = [
   {
@@ -78,7 +82,7 @@ function recordTitle(record: any) {
 }
 ---
 
-<BaseLayout title="Administrar portfolio — Tobías Mislej" description="Panel local para gestionar el contenido del portfolio.">
+<BaseLayout title="Administrar portfolio — Tobías Mislej" description="Panel para gestionar el contenido del portfolio.">
   <div class="admin-shell">
     <aside class="admin-sidebar">
       <a class="admin-brand" href="/" aria-label="Ver portfolio">
@@ -102,8 +106,8 @@ function recordTitle(record: any) {
 
     <main class="admin-main" id="contenido">
       <header class="admin-topbar">
-        <div><span class="admin-live-dot"></span><strong>Base local conectada</strong><small data-last-update>Actualizada {new Date(database.meta.updatedAt).toLocaleString("es-AR")}</small></div>
-        <button type="button" class="admin-key-button" data-key-open><Icon name="key" size={17} />Clave API</button>
+        <div><span class:list={["admin-live-dot", { "is-warning": !storage.persistent }]}></span><strong>{storage.label}</strong><small data-last-update>Actualizada {new Date(database.meta.updatedAt).toLocaleString("es-AR")}</small></div>
+        <button type="button" class="admin-key-button" data-admin-logout><Icon name="key" size={17} />Cerrar sesión</button>
       </header>
 
       <div class="admin-toast" role="status" aria-live="polite" data-admin-toast hidden></div>
@@ -111,7 +115,7 @@ function recordTitle(record: any) {
       <section class="admin-view is-active" data-admin-view="summary">
         <header class="admin-page-heading">
           <div><p>Panel de contenido</p><h1>Todo lo importante,<br />en un solo lugar.</h1></div>
-          <p>Administrá el contenido que alimenta el portfolio público. Los cambios realizados en local se guardan en <code>data/portfolio.json</code>.</p>
+          <p>Administrá el contenido que alimenta el portfolio público. {storage.configured ? "Los cambios se guardan de forma persistente en Vercel Blob." : "En desarrollo, los cambios se guardan en data/portfolio.json."}</p>
         </header>
 
         <div class="admin-stats">
@@ -132,9 +136,9 @@ function recordTitle(record: any) {
           </section>
           <aside class="admin-info-card">
             <Icon name="database" size={28} />
-            <span>Persistencia local</span>
-            <h2>JSON + archivos</h2>
-            <p>Las imágenes y los PDF se guardan en <code>public/uploads</code>. En Vercel necesitarás una base y almacenamiento persistentes para editar después del despliegue.</p>
+            <span>{storage.configured ? "Persistencia en producción" : "Persistencia local"}</span>
+            <h2>{storage.configured ? "Vercel Blob" : "JSON + archivos"}</h2>
+            <p>{storage.configured ? "La información, las imágenes y los PDF se conservan entre despliegues y quedan disponibles inmediatamente en el portfolio público." : "Conectá un Blob público al proyecto de Vercel para habilitar la edición persistente desde esta página."}</p>
             <a href="/api/health" target="_blank">Comprobar API →</a>
           </aside>
         </div>
@@ -192,10 +196,10 @@ function recordTitle(record: any) {
             </fieldset>
             <fieldset>
               <legend>04 · Imágenes y documentos</legend>
-              <label class="admin-file-field span-2"><span>Portada</span><input type="file" name="coverImage" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" /><small>JPG, PNG, WebP, GIF o SVG · máximo 8 MB</small></label>
+              <label class="admin-file-field span-2"><span>Portada</span><input type="file" name="coverImage" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" /><small>JPG, PNG, WebP, GIF o SVG · máximo 4 MB</small></label>
               <label class="admin-file-field span-2"><span>Galería</span><input type="file" name="galleryImages" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" multiple /><small>Podés seleccionar varias imágenes; se añadirán a las existentes.</small></label>
               <label class="span-2">Descripción accesible de las imágenes<input name="galleryAlt" placeholder="Ej. Pantallas responsive del sistema de turnos" /></label>
-              <label class="admin-file-field span-2"><span>Documentos PDF</span><input type="file" name="pdfFiles" accept="application/pdf" multiple /><small>Presentaciones o casos completos · máximo 15 MB cada uno.</small></label>
+              <label class="admin-file-field span-2"><span>Documentos PDF</span><input type="file" name="pdfFiles" accept="application/pdf" multiple /><small>Presentaciones o casos completos · máximo 4 MB cada uno.</small></label>
               <div class="admin-existing-files span-2" data-project-files hidden></div>
             </fieldset>
             <fieldset class="admin-form__settings">
@@ -335,14 +339,6 @@ function recordTitle(record: any) {
       </section>
     </main>
   </div>
-
-  <dialog class="admin-key-dialog" data-key-dialog>
-    <form method="dialog">
-      <div><span>Seguridad</span><h2>Clave de administración</h2><p>En local puede quedar vacía. Si configurás <code>PORTFOLIO_ADMIN_KEY</code>, guardá aquí el mismo valor; solo se conserva durante esta sesión del navegador.</p></div>
-      <label>Clave API<input type="password" autocomplete="off" data-key-input /></label>
-      <footer><button value="cancel" class="button-quiet">Cancelar</button><button value="default" class="button-primary" data-key-save>Guardar clave</button></footer>
-    </form>
-  </dialog>
 
   <script id="admin-data" type="application/json" set:html={adminData}></script>
   <script>import "../scripts/admin.js";</script>

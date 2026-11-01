@@ -2,13 +2,13 @@
 
 ## Objetivo
 
-Convertir la estructura visual del portfolio en un sistema editable, manteniendo la experiencia pública de una sola página y agregando un archivo de trabajos. Esta etapa prioriza el uso local y deja explícito el camino para migrar a infraestructura productiva.
+Convertir la estructura visual del portfolio en un sistema editable, manteniendo la experiencia pública de una sola página y agregando un archivo de trabajos. La misma interfaz funciona en local y en Vercel con persistencia productiva.
 
 ## Decisiones principales
 
-### Base JSON legible
+### Persistencia intercambiable
 
-`data/portfolio.json` funciona como fuente única de verdad. Puede versionarse, revisarse y migrarse con facilidad. El repositorio usa una cola de mutaciones y reemplazo atómico: primero escribe un archivo temporal y después lo renombra, evitando escrituras parciales.
+En local, `data/portfolio.json` funciona como fuente de verdad y las mutaciones usan reemplazo atómico. En Vercel, la capa de almacenamiento lee y escribe `portfolio-data/portfolio.json` en Blob, con control de versión mediante `etag` para evitar que dos sesiones pisen cambios simultáneos. Si todavía no existe una copia remota, el primer cambio parte del JSON incluido en el despliegue y crea la base persistente.
 
 ### API separada de la interfaz
 
@@ -68,21 +68,23 @@ Respuesta de error:
 
 ## Carga de archivos
 
-| Tipo | Formatos | Límite | Destino local |
+| Tipo | Formatos | Límite | Destino local / Vercel Blob |
 |---|---|---:|---|
-| Imagen | JPG, PNG, WebP, GIF, SVG | 8 MB | `public/uploads/images` |
-| Documento | PDF | 15 MB | `public/uploads/pdfs` |
+| Imagen | JPG, PNG, WebP, GIF, SVG | 4 MB | `public/uploads/images` / `uploads/images` |
+| Documento | PDF | 4 MB | `public/uploads/pdfs` / `uploads/pdfs` |
 
 Los nombres se normalizan y reciben un identificador aleatorio para evitar colisiones. Eliminar una ficha no elimina automáticamente sus archivos: esta decisión evita borrar documentos compartidos o perder material por error. La limpieza de archivos huérfanos deberá incorporarse con una vista de revisión en una etapa posterior.
 
 ## Seguridad
 
-- En local, las escrituras están habilitadas para facilitar el desarrollo.
-- Si existe `PORTFOLIO_ADMIN_KEY`, toda escritura exige el header `x-admin-key`.
-- En producción, la API bloquea escrituras si la variable no está configurada.
-- El panel guarda la clave solo en `sessionStorage`, nunca en el repositorio.
+- En local, las escrituras están habilitadas sin clave para facilitar el desarrollo; `.env` permite probar el acceso protegido.
+- En producción, la API bloquea la administración si falta `PORTFOLIO_ADMIN_KEY`.
+- La pantalla `/admin/login` valida la clave y crea una cookie de sesión `HttpOnly`, `SameSite=Strict` y `Secure` en producción.
+- Los `GET` privados y todas las mutaciones del panel exigen una sesión válida; `/api/portfolio` sigue siendo público y filtrado.
+- La clave nunca se incluye en el repositorio ni se expone al JavaScript del panel.
+- Vercel Blob debe estar conectado antes de escribir en producción.
 
-Antes de publicar un panel editable se necesita autenticación real, protección CSRF, limitación de intentos, logs de auditoría y una política de backups.
+Para un portfolio personal, la sesión firmada y `SameSite=Strict` ofrecen una barrera proporcionada. Si el panel creciera a varios usuarios, convendría migrar a identidades individuales, roles, limitación de intentos, auditoría y backups programados.
 
 ## Pruebas ejecutadas
 
@@ -98,4 +100,4 @@ Antes de publicar un panel editable se necesita autenticación real, protección
 
 ## Próxima etapa recomendada
 
-Migrar el repositorio local a una base SQL y las cargas a almacenamiento de objetos, añadir autenticación y conservar la misma API pública. Gracias a la separación actual, la interfaz y los formularios pueden mantenerse mientras cambia la capa de persistencia.
+Mejorar la interfaz pública sin cambiar los contratos de la API. Si el volumen de información o la cantidad de editores aumenta, la capa de persistencia puede migrarse de Blob a SQL sin reescribir los formularios.

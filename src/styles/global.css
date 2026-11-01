@@ -80,6 +80,31 @@ a {
   transform: none;
 }
 
+.admin-shortcut {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 120;
+  padding: 0.75rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--acid);
+  color: var(--white);
+  background: var(--ink);
+  box-shadow: 0 8px 30px rgba(18, 20, 24, 0.25);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.admin-shortcut:hover {
+  color: var(--ink);
+  background: var(--acid);
+}
+
 .section-anchor {
   scroll-margin-top: 72px;
 }
@@ -1533,6 +1558,20 @@ a {
   text-decoration: none;
 }
 
+.site-footer__links {
+  justify-self: end;
+  display: flex;
+  gap: 1.3rem;
+}
+
+.site-footer__links a:first-child {
+  color: #8c9099;
+}
+
+.site-footer__links a:hover {
+  color: var(--acid);
+}
+
 .not-found {
   min-height: 100svh;
   padding: var(--page);
@@ -1897,6 +1936,10 @@ button:focus-visible {
   }
 
   .site-footer a {
+    justify-self: start;
+  }
+
+  .site-footer__links {
     justify-self: start;
   }
 }

@@ -6,16 +6,16 @@
 2. **Archivo de trabajos.** `/trabajos` muestra todos los proyectos visibles y `/trabajos/[slug]` desarrolla cada caso.
 3. **Administración.** `/admin` presenta formularios y listados para gestionar la información sin editar archivos a mano.
 4. **API.** Las rutas de `src/pages/api` validan solicitudes, archivos y permisos.
-5. **Dominio y persistencia.** `src/server` normaliza los datos, guarda cargas y escribe `data/portfolio.json` de forma atómica.
+5. **Dominio y persistencia.** `src/server` normaliza los datos y usa JSON local en desarrollo o Vercel Blob en producción.
 
 ## Flujo de datos
 
 ```mermaid
 flowchart LR
   A[Panel admin] --> B[API Astro]
-  B --> C[Validación]
-  C --> D[data/portfolio.json]
-  C --> E[public/uploads]
+  B --> C[Validación y sesión]
+  C --> D[JSON local]
+  C --> E[Vercel Blob]
   D --> F[Portfolio público]
   E --> F
 ```
@@ -42,6 +42,7 @@ src/
     http.js
     portfolio.repository.js
     record.normalizers.js
+    storage.service.js
     upload.service.js
   styles/
 ```
@@ -58,4 +59,4 @@ src/
 
 ## Seguridad y límites
 
-La etapa 02 es una API local. En desarrollo se permite escribir sin clave; en producción se exige `PORTFOLIO_ADMIN_KEY`. La clave es una protección transitoria, no reemplaza un sistema de autenticación. La base JSON y `public/uploads` tampoco sustituyen almacenamiento persistente para un despliegue editable.
+En desarrollo se puede escribir sin clave; en producción se exige `PORTFOLIO_ADMIN_KEY` y una sesión firmada. La base y las cargas se guardan en Vercel Blob para sobrevivir despliegues y reinicios. Cada archivo puede pesar hasta 4 MB.

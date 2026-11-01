@@ -4,8 +4,10 @@ import Icon from "../components/Icon.astro";
 import ProjectGallery from "../components/ProjectGallery.astro";
 import ProjectDialog from "../components/ProjectDialog.astro";
 import { getPublicPortfolio } from "../server/portfolio.repository.js";
+import { hasAdminSession } from "../server/http.js";
 
 const database = await getPublicPortfolio();
+const adminActive = hasAdminSession(Astro.request);
 const profile = { ...database.profile, ...database.contact };
 const projects = database.projects.filter((project: any) => project.featured).map((project: any, index: number) => ({
   ...project,
@@ -45,6 +47,7 @@ const navItems = [
 ---
 
 <BaseLayout>
+  {adminActive && <a class="admin-shortcut" href="/admin#projects"><Icon name="key" size={16} /> Editar portfolio</a>}
   <header class="topbar">
     <a class="wordmark" href="#inicio" aria-label="Tobías Mislej, volver al inicio">
       <span>TM</span>
@@ -319,7 +322,7 @@ const navItems = [
   <footer class="site-footer">
     <p>© 2026 Tobías Mislej</p>
     <p>Portfolio UX/UI & Multimedia</p>
-    <a href="#inicio">Volver arriba ↑</a>
+    <span class="site-footer__links"><a href="/admin">Administrar</a><a href="#inicio">Volver arriba ↑</a></span>
   </footer>
 
   <script>

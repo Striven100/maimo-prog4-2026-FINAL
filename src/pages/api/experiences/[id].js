@@ -1,11 +1,12 @@
-import { apiError, assertWriteAccess, json, readJson } from "../../../server/http.js";
+import { apiError, assertAdminAccess, assertWriteAccess, json, readJson } from "../../../server/http.js";
 import { deleteRecord, getRecord, updateRecord } from "../../../server/portfolio.repository.js";
 import { normalizeExperience } from "../../../server/record.normalizers.js";
 
 export const prerender = false;
 
-export async function GET({ params }) {
+export async function GET({ request, params }) {
   try {
+    assertAdminAccess(request);
     return json({ ok: true, data: await getRecord("experiences", params.id) });
   } catch (error) {
     return apiError(error);
