@@ -1,14 +1,34 @@
 {
   "meta": {
-    "stage": "02-api-funcional",
-    "schemaVersion": 1,
-    "updatedAt": "2026-10-30T11:11:44.923Z"
+    "stage": "03-experiencia-editorial",
+    "schemaVersion": 2,
+    "updatedAt": "2026-11-04T17:00:00.000Z"
+  },
+  "site": {
+    "eyebrow": "Portfolio independiente / 2026",
+    "heroLine": "Diseño experiencias",
+    "heroAccent": "claras, útiles y memorables.",
+    "specialties": [
+      "UX Research",
+      "Diseño de interfaces",
+      "Identidad visual",
+      "Front-end"
+    ],
+    "projectsTitle": "Proyectos que cambian de lenguaje según el problema.",
+    "projectsIntro": "Casos de identidad, producto e interfaces desarrollados como sistemas completos, no como pantallas aisladas.",
+    "capabilitiesTitle": "Una práctica multidisciplinaria, organizada por función.",
+    "experienceTitle": "Diseño aplicado en contextos creativos, técnicos y educativos.",
+    "educationTitle": "Aprendizaje continuo, entre producto y multimedia.",
+    "contactTitle": "Construyamos algo claro y útil.",
+    "contactBody": "Estoy interesado en oportunidades de UX/UI, producto y diseño multimedia donde pueda investigar, organizar y transformar información en experiencias comprensibles.",
+    "footerNote": "Portfolio UX/UI & Multimedia"
   },
   "profile": {
     "name": "Tobías Mislej",
     "role": "Diseñador UX/UI & Multimedia",
     "status": "Disponible para oportunidades UX/UI",
-    "about": "Me motiva trabajar en proyectos donde pueda mejorar experiencias existentes, organizar información de forma clara y generar productos que conecten con las necesidades reales de los usuarios. Busco seguir desarrollándome en roles vinculados a UX y producto, aportando una mirada analítica, creativa y orientada a resultados."
+    "about": "Me motiva trabajar en proyectos donde pueda mejorar experiencias existentes, organizar información de forma clara y generar productos que conecten con las necesidades reales de los usuarios. Busco seguir desarrollándome en roles vinculados a UX y producto, aportando una mirada analítica, creativa y orientada a resultados.",
+    "portraitImage": ""
   },
   "contact": {
     "email": "tobimislej@gmail.com",
@@ -16,7 +36,9 @@
     "phoneHref": "+5491126135693",
     "linkedin": "https://ar.linkedin.com/in/tobias-mislej",
     "location": "CABA, Argentina",
-    "availability": "Disponible para oportunidades UX/UI"
+    "availability": "Disponible para oportunidades UX/UI",
+    "github": "https://github.com/Striven100",
+    "behance": ""
   },
   "projects": [
     {
@@ -27,6 +49,8 @@
       "category": "Identidad + UX/UI",
       "projectType": "Proyecto conceptual",
       "status": "Finalizado",
+      "year": "2026",
+      "accent": "#ff5d3d",
       "summary": "Sistema de identidad e interfaz para un festival de artes digitales en Buenos Aires.",
       "description": "UMBRAL organiza programación, artistas, sedes, accesibilidad y entradas mediante una identidad modular de alto contraste. La experiencia prioriza la lectura rápida de horarios, la comparación de actividades y la continuidad entre el espacio cultural y el entorno digital.",
       "role": "Arquitectura de información, identidad visual y diseño responsive.",
@@ -37,6 +61,11 @@
         "Figma",
         "Illustrator",
         "Prototipado"
+      ],
+      "deliverables": [
+        "Arquitectura de información",
+        "Identidad visual",
+        "Prototipo responsive"
       ],
       "tags": [
         "ux",
@@ -73,6 +102,8 @@
       "category": "Branding + Web",
       "projectType": "Proyecto conceptual",
       "status": "Finalizado",
+      "year": "2026",
+      "accent": "#d5ff38",
       "summary": "Identidad y diseño web para una marca que pone en valor el origen de cada cosecha.",
       "description": "Brasa Alta es una marca conceptual de café de especialidad que pone en valor el origen, la trazabilidad y el carácter de cada cosecha. Su identidad combina una estética editorial de fuerte contraste con una paleta intensa y un sistema visual flexible.",
       "role": "Estrategia de marca, sistema visual y diseño de producto digital.",
@@ -83,6 +114,11 @@
         "Figma",
         "Illustrator",
         "Dirección visual"
+      ],
+      "deliverables": [
+        "Estrategia de marca",
+        "Sistema visual",
+        "Catálogo digital"
       ],
       "tags": [
         "branding",
@@ -119,6 +155,8 @@
       "category": "Producto + Identidad",
       "projectType": "Proyecto conceptual",
       "status": "Finalizado",
+      "year": "2026",
+      "accent": "#b9ff32",
       "summary": "Identidad y diseño de producto para una red de bicicletas compartidas.",
       "description": "TRAZA integra planificación de recorridos, estaciones y seguimiento de viajes en una experiencia de movilidad urbana. La identidad se inspira en mapas, intersecciones y señalética.",
       "role": "Producto digital, sistema de navegación e identidad aplicada.",
@@ -129,6 +167,11 @@
         "Figma",
         "Illustrator",
         "Sistemas UI"
+      ],
+      "deliverables": [
+        "Diseño de producto",
+        "Sistema de navegación",
+        "Identidad aplicada"
       ],
       "tags": [
         "producto",
@@ -165,6 +208,8 @@
       "category": "UX/UI + Branding",
       "projectType": "Proyecto conceptual",
       "status": "Finalizado",
+      "year": "2026",
+      "accent": "#f55f58",
       "summary": "Plataforma de cuidado que centraliza turnos, consultas, indicaciones y registros personales.",
       "description": "NARA+ propone una gestión de salud clara y cercana, con privacidad, accesibilidad y control de la información por parte de cada persona. Permite agendar turnos, acceder a consultas y gestionar permisos sin convertir el cuidado en una competencia.",
       "role": "Arquitectura de información, identidad y experiencia responsive.",
@@ -175,6 +220,11 @@
         "Figma",
         "UX Writing",
         "Prototipado"
+      ],
+      "deliverables": [
+        "Arquitectura UX",
+        "Sistema de privacidad",
+        "Experiencia responsive"
       ],
       "tags": [
         "ux",

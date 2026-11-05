@@ -21,6 +21,8 @@ export async function PUT({ request }) {
       phone: cleanText(body.phone),
       phoneHref: cleanText(body.phoneHref),
       linkedin: cleanText(body.linkedin),
+      github: cleanText(body.github),
+      behance: cleanText(body.behance),
       location: cleanText(body.location),
       availability: cleanText(body.availability)
     });

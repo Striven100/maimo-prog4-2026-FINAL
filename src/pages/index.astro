@@ -9,33 +9,40 @@ import { hasAdminSession } from "../server/http.js";
 const database = await getPublicPortfolio();
 const adminActive = hasAdminSession(Astro.request);
 const profile = { ...database.profile, ...database.contact };
+const site = {
+  eyebrow: "Portfolio independiente / 2026",
+  heroLine: "Diseño experiencias",
+  heroAccent: "claras, útiles y memorables.",
+  specialties: ["UX Research", "Diseño de interfaces", "Identidad visual", "Front-end"],
+  projectsTitle: "Proyectos que cambian de lenguaje según el problema.",
+  projectsIntro: "Casos de identidad, producto e interfaces desarrollados como sistemas completos.",
+  capabilitiesTitle: "Una práctica multidisciplinaria, organizada por función.",
+  experienceTitle: "Diseño aplicado en contextos creativos, técnicos y educativos.",
+  educationTitle: "Aprendizaje continuo, entre producto y multimedia.",
+  contactTitle: "Construyamos algo claro y útil.",
+  contactBody: profile.about,
+  footerNote: "Portfolio UX/UI & Multimedia",
+  ...(database.site || {})
+};
 const projects = database.projects.filter((project: any) => project.featured).map((project: any, index: number) => ({
   ...project,
   number: String(index + 1).padStart(2, "0")
 }));
-const services = database.services.map((item) => ({ ...item, label: item.name }));
-const skills = database.skills.map((item) => item.name);
+const tagFilters = [
+  { key: "all", label: "Todos", count: projects.length },
+  ...["ux", "branding", "producto"].map((key) => ({
+    key,
+    label: key === "ux" ? "UX/UI" : key === "branding" ? "Identidad" : "Producto",
+    count: projects.filter((item: any) => item.tags.includes(key)).length
+  })).filter((item) => item.count > 0)
+];
+const services = database.services;
+const skills = database.skills;
 const tools = database.tools;
-const experience = database.experiences.map((item) => ({
-  title: item.role,
-  organization: item.company,
-  description: item.summary,
-  icon: "briefcase"
-}));
-const appliedProjects = projects.slice(0, 4).map((item) => ({
-  title: item.title,
-  description: item.summary,
-  meta: item.tools.join(" · "),
-  icon: "layers"
-}));
-const education = database.education.map((item) => ({
-  title: item.title,
-  place: item.institution,
-  detail: [item.startDate && item.endDate ? `${item.startDate}—${item.endDate}` : item.startDate, item.description].filter(Boolean).join(" · ")
-}));
-const certifications = database.certifications.map((item) => item.title);
-const interests = database.interests.map((item) => ({ ...item, label: item.name }));
-
+const experience = database.experiences;
+const education = database.education;
+const certifications = database.certifications;
+const interests = database.interests;
 const navItems = [
   { id: "inicio", label: "Inicio" },
   { id: "proyectos", label: "Proyectos" },
@@ -44,288 +51,81 @@ const navItems = [
   { id: "formacion", label: "Formación" },
   { id: "contacto", label: "Contacto" }
 ];
+const formatPeriod = (item: any) => {
+  if (!item.startDate && !item.endDate) return item.current ? "Actualidad" : "Experiencia profesional";
+  return [item.startDate, item.current ? "Actualidad" : item.endDate].filter(Boolean).join(" — ");
+};
 ---
 
 <BaseLayout>
+  <div class="page-progress" aria-hidden="true"><i data-page-progress></i></div>
   {adminActive && <a class="admin-shortcut" href="/admin#projects"><Icon name="key" size={16} /> Editar portfolio</a>}
-  <header class="topbar">
-    <a class="wordmark" href="#inicio" aria-label="Tobías Mislej, volver al inicio">
-      <span>TM</span>
-      <strong>Tobías Mislej</strong>
-    </a>
 
-    <nav class="topbar__nav" aria-label="Navegación principal">
-      {navItems.map((item) => (
-        <a href={`#${item.id}`} data-nav-link={item.id}>{item.label}</a>
-      ))}
-    </nav>
-
-    <a class="topbar__contact" href={`mailto:${profile.email}`}>
-      <span>Disponible</span>
-      <i aria-hidden="true"></i>
-    </a>
+  <header class="topbar" data-topbar>
+    <a class="wordmark" href="#inicio" aria-label="Tobías Mislej, volver al inicio"><span>TM</span><strong>Tobías Mislej</strong><small>UX/UI · Multimedia</small></a>
+    <nav class="topbar__nav" aria-label="Navegación principal">{navItems.map((item) => <a href={`#${item.id}`} data-nav-link={item.id}>{item.label}</a>)}</nav>
+    <a class="topbar__contact" href={`mailto:${profile.email}`}><span>{profile.availability || "Disponible"}</span><i aria-hidden="true"></i></a>
+    <button class="menu-toggle" type="button" data-menu-toggle aria-expanded="false" aria-controls="mobile-menu"><span></span><span></span><span></span><b>Menú</b></button>
   </header>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <div class="mobile-menu__index">{navItems.map((item, index) => <a href={`#${item.id}`} data-mobile-link><span>{String(index + 1).padStart(2, "0")}</span>{item.label}</a>)}</div>
+    <div class="mobile-menu__footer"><a href={`mailto:${profile.email}`}>{profile.email}</a><a href={profile.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
+  </div>
 
   <main id="contenido">
     <section class="intro section-anchor" id="inicio" data-section="inicio">
-      <aside class="identity-panel">
-        <div class="identity-panel__portrait" aria-label="Monograma de Tobías Mislej">
-          <span>T</span><span>M</span>
-          <i></i>
+      <aside class="identity-panel" data-reveal="left">
+        <div class:list={["identity-panel__portrait", { "has-image": profile.portraitImage }]} aria-label="Identidad de Tobías Mislej">
+          {profile.portraitImage ? <img src={profile.portraitImage} alt={`Retrato de ${profile.name}`} /> : <><span>T</span><span>M</span><i></i></>}
           <small>UX / UI<br />MULTIMEDIA</small>
         </div>
-
-        <div class="identity-panel__status">
-          <i aria-hidden="true"></i>
-          <span>{profile.status}</span>
-        </div>
-
-        <div class="identity-panel__meta">
-          <p><Icon name="pin" size={17} /> {profile.location}</p>
-          <p><Icon name="graduation" size={17} /> Universidad Maimónides</p>
-        </div>
-
-        <div class="identity-panel__links">
-          <a href={`mailto:${profile.email}`} aria-label={`Escribir a ${profile.email}`}>
-            <Icon name="mail" size={18} /> Email <Icon name="arrow" size={16} />
-          </a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer">
-            <Icon name="linkedin" size={18} /> LinkedIn <Icon name="arrow" size={16} />
-          </a>
-        </div>
+        <div class="identity-panel__status"><i aria-hidden="true"></i><span>{profile.status}</span></div>
+        <div class="identity-panel__meta"><p><Icon name="pin" size={17} /> {profile.location}</p><p><Icon name="graduation" size={17} /> Universidad Maimónides</p></div>
+        <div class="identity-panel__links"><a href={`mailto:${profile.email}`}><Icon name="mail" size={18} /> Email <Icon name="arrow" size={16} /></a><a href={profile.linkedin} target="_blank" rel="noreferrer"><Icon name="linkedin" size={18} /> LinkedIn <Icon name="arrow" size={16} /></a></div>
       </aside>
 
       <div class="intro__content">
-        <p class="section-kicker">Portfolio / 2026</p>
-        <h1>
-          Diseño experiencias<br />
-          <span>claras, útiles y memorables.</span>
-        </h1>
-        <div class="intro__summary">
-          <p>{profile.about}</p>
-          <div class="role-list" aria-label="Áreas de especialización">
-            <span>01 · UX Research</span>
-            <span>02 · Diseño de interfaces</span>
-            <span>03 · Identidad visual</span>
-            <span>04 · Front-end</span>
-          </div>
-        </div>
-
-        <div class="intro__index" aria-label="Resumen del portfolio">
-          <a href="#proyectos"><strong>{String(projects.length).padStart(2, "0")}</strong><span>Casos<br />seleccionados</span></a>
-          <a href="#capacidades"><strong>{String(services.length).padStart(2, "0")}</strong><span>Servicios<br />y capacidades</span></a>
-          <a href="#experiencia"><strong>{String(experience.length).padStart(2, "0")}</strong><span>Experiencias<br />profesionales</span></a>
-          <a href="#formacion"><strong>{String(certifications.length).padStart(2, "0")}</strong><span>Certificaciones<br />destacadas</span></a>
-        </div>
+        <p class="section-kicker" data-reveal>{site.eyebrow}</p>
+        <h1 data-reveal data-reveal-delay="1">{site.heroLine}<br /><span>{site.heroAccent}</span></h1>
+        <div class="intro__summary" data-reveal data-reveal-delay="2"><p>{profile.about}</p><div class="role-list" aria-label="Áreas de especialización">{site.specialties.map((item: string, index: number) => <span>{String(index + 1).padStart(2, "0")} · {item}</span>)}</div></div>
+        <div class="intro__index" data-reveal data-reveal-delay="3"><a href="#proyectos"><strong>{String(projects.length).padStart(2, "0")}</strong><span>Casos<br />seleccionados</span></a><a href="#capacidades"><strong>{String(services.length).padStart(2, "0")}</strong><span>Servicios<br />y capacidades</span></a><a href="#experiencia"><strong>{String(experience.length).padStart(2, "0")}</strong><span>Experiencias<br />profesionales</span></a><a href="#formacion"><strong>{String(certifications.length).padStart(2, "0")}</strong><span>Certificaciones<br />destacadas</span></a></div>
       </div>
+      <div class="kinetic-strip" aria-hidden="true"><div><span>UX/UI</span><i></i><span>Producto digital</span><i></i><span>Identidad visual</span><i></i><span>Investigación</span><i></i><span>UX/UI</span><i></i><span>Producto digital</span><i></i><span>Identidad visual</span><i></i><span>Investigación</span></div></div>
     </section>
 
     <section class="portfolio-section portfolio-section--dark section-anchor" id="proyectos" data-section="proyectos">
-      <header class="section-heading section-heading--light">
-        <div>
-          <p class="section-kicker">01 / Trabajo seleccionado</p>
-          <h2>Proyectos que cambian<br />de lenguaje según el problema.</h2>
-        </div>
-        <div class="section-heading__aside"><p>Seleccioná un caso para abrir su ficha completa sin salir del portfolio.</p><a href="/trabajos">Ver todos los trabajos →</a></div>
-      </header>
-
-      <div class="filter-bar" aria-label="Filtrar proyectos">
-        <button type="button" data-project-filter="all" aria-pressed="true">Todos <span>{String(projects.length).padStart(2, "0")}</span></button>
-        <button type="button" data-project-filter="ux" aria-pressed="false">UX/UI <span>{String(projects.filter((item) => item.tags.includes("ux")).length).padStart(2, "0")}</span></button>
-        <button type="button" data-project-filter="branding" aria-pressed="false">Identidad <span>{String(projects.filter((item) => item.tags.includes("branding")).length).padStart(2, "0")}</span></button>
-        <button type="button" data-project-filter="producto" aria-pressed="false">Producto <span>{String(projects.filter((item) => item.tags.includes("producto")).length).padStart(2, "0")}</span></button>
-      </div>
-
+      <header class="section-heading section-heading--light" data-reveal><div><p class="section-kicker">01 / Trabajo seleccionado</p><h2>{site.projectsTitle}</h2></div><div class="section-heading__aside"><p>{site.projectsIntro}</p><a href="/trabajos">Explorar archivo completo <Icon name="arrow" size={16} /></a></div></header>
+      <div class="filter-bar" aria-label="Filtrar proyectos" data-reveal>{tagFilters.map((filter) => <button type="button" data-project-filter={filter.key} aria-pressed={filter.key === "all" ? "true" : "false"}>{filter.label}<span>{String(filter.count).padStart(2, "0")}</span></button>)}</div>
       <div class="project-grid project-rail" data-project-grid>
-        {projects.map((project) => (
-          <article class="project-card" data-project-card data-project-tags={project.tags.join(" ")}>
-            <button type="button" data-dialog-open={`project-${project.id}`} aria-label={`Ver proyecto ${project.title}`}>
-              <ProjectGallery project={project} compact />
-              <span class="project-card__meta">
-                <i>{project.number}</i>
-                <small>{project.category}</small>
-              </span>
-              <span class="project-card__title">
-                <strong>{project.title}</strong>
-                <small>{project.subtitle}</small>
-              </span>
-              <span class="project-card__summary">{project.summary}</span>
-              <span class="project-card__action">Ver caso <Icon name="arrow" size={18} /></span>
-            </button>
-          </article>
-        ))}
+        {projects.map((project: any, index: number) => <article class="project-card" data-project-card data-project-tags={project.tags.join(" ")} style={`--project-accent:${project.accent || "#3151ff"}`} data-reveal data-reveal-delay={String(index % 2)}><button type="button" data-dialog-open={`project-${project.id}`} aria-label={`Ver proyecto ${project.title}`}><ProjectGallery project={project} compact /><span class="project-card__meta"><i>{project.number}</i><small>{project.category}</small><em>{project.year || "2026"}</em></span><span class="project-card__title"><strong>{project.title}</strong><small>{project.subtitle}</small></span><span class="project-card__summary">{project.summary}</span><span class="project-card__action">Abrir caso <Icon name="arrow" size={18} /></span></button></article>)}
       </div>
-
-      {projects.map((project) => <ProjectDialog project={project} />)}
+      {projects.map((project: any) => <ProjectDialog project={project} />)}
     </section>
 
     <section class="portfolio-section section-anchor" id="capacidades" data-section="capacidades">
-      <header class="section-heading">
-        <div>
-          <p class="section-kicker">02 / Capacidades</p>
-          <h2>Una práctica multidisciplinaria,<br />organizada por función.</h2>
-        </div>
-        <p>Diseño, investigación, producción y tecnología reunidos en un mismo sistema de trabajo.</p>
-      </header>
-
-      <div class="capability-layout">
-        <div class="service-board">
-          <h3>Servicios</h3>
-          <div class="service-grid">
-            {services.map((service, index) => (
-              <article>
-                <span>{String(index + 1).padStart(2, "0")}</span>
-                <Icon name={service.icon} size={21} />
-                <strong>{service.label}</strong>
-              </article>
-            ))}
-          </div>
-        </div>
-
-        <aside class="skill-board">
-          <div>
-            <p class="section-kicker">Skill set</p>
-            <h3>Cómo trabajo</h3>
-          </div>
-          <ol>
-            {skills.map((skill, index) => (
-              <li><span>{String(index + 1).padStart(2, "0")}</span>{skill}</li>
-            ))}
-          </ol>
-        </aside>
-      </div>
-
-      <div class="tool-board">
-        <div class="tool-board__heading">
-          <div>
-            <p class="section-kicker">Herramientas</p>
-            <h3>Entorno de producción</h3>
-          </div>
-          <p>Los niveles indican autonomía de uso dentro de proyectos personales, académicos y freelance.</p>
-        </div>
-        <div class="tool-grid">
-          {tools.map((tool) => (
-            <article>
-              <Icon name={tool.icon} size={22} />
-              <strong>{tool.name}</strong>
-              <span class:list={[{ "level--advanced": tool.level === "Avanzado" }]}>{tool.level}</span>
-            </article>
-          ))}
-        </div>
-      </div>
+      <header class="section-heading" data-reveal><div><p class="section-kicker">02 / Capacidades</p><h2>{site.capabilitiesTitle}</h2></div><p>Investigación, producción y tecnología reunidas en un proceso que conecta la idea con una experiencia usable.</p></header>
+      <div class="capability-layout" data-reveal><div class="service-board"><h3>Servicios</h3><div class="service-grid">{services.map((service: any, index: number) => <article><span>{String(index + 1).padStart(2, "0")}</span><Icon name={service.icon} size={21} /><div><strong>{service.name}</strong>{service.description && <small>{service.description}</small>}</div></article>)}</div></div><aside class="skill-board"><div><p class="section-kicker">Skill set</p><h3>Cómo trabajo</h3></div><ol>{skills.map((skill: any, index: number) => <li><span>{String(index + 1).padStart(2, "0")}</span><div>{skill.name}<small>{skill.level}</small></div></li>)}</ol></aside></div>
+      <div class="tool-board" data-reveal><div class="tool-board__heading"><div><p class="section-kicker">Herramientas</p><h3>Entorno de producción</h3></div><p>Los niveles representan autonomía de uso en proyectos académicos, personales y freelance.</p></div><div class="tool-grid">{tools.map((tool: any) => <article><Icon name={tool.icon} size={22} /><strong>{tool.name}</strong><small>{tool.category}</small><span class:list={[{ "level--advanced": tool.level === "Avanzado" }]}>{tool.level}</span></article>)}</div></div>
     </section>
 
     <section class="portfolio-section portfolio-section--tint section-anchor" id="experiencia" data-section="experiencia">
-      <header class="section-heading">
-        <div>
-          <p class="section-kicker">03 / Experiencia</p>
-          <h2>Diseño aplicado en contextos<br />creativos, técnicos y educativos.</h2>
-        </div>
-        <p>Roles formales y colaboraciones que combinan comunicación, organización y producción.</p>
-      </header>
-
-      <div class="experience-layout">
-        <div class="timeline-list">
-          {experience.map((item, index) => (
-            <article>
-              <span class="timeline-list__number">{String(index + 1).padStart(2, "0")}</span>
-              <span class="timeline-list__icon"><Icon name={item.icon} size={22} /></span>
-              <div>
-                <p>{item.organization}</p>
-                <h3>{item.title}</h3>
-                <span>{item.description}</span>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <aside class="applied-board">
-          <div class="applied-board__heading">
-            <p class="section-kicker">Experiencia aplicada</p>
-            <h3>Proyectos y prácticas</h3>
-          </div>
-          {appliedProjects.map((item) => (
-            <article>
-              <Icon name={item.icon} size={22} />
-              <div>
-                <h4>{item.title}</h4>
-                <p>{item.description}</p>
-                <span>{item.meta}</span>
-              </div>
-            </article>
-          ))}
-        </aside>
-      </div>
+      <header class="section-heading" data-reveal><div><p class="section-kicker">03 / Experiencia</p><h2>{site.experienceTitle}</h2></div><p>Roles y colaboraciones donde la comunicación, la organización y la producción forman parte del diseño.</p></header>
+      <div class="experience-stage"><ol class="timeline-list">{experience.map((item: any, index: number) => <li data-reveal><span class="timeline-list__number">{String(index + 1).padStart(2, "0")}</span><span class="timeline-list__icon"><Icon name="briefcase" size={21} /></span><div><p>{item.company}</p><h3>{item.role}</h3><span>{item.summary}</span><small>{formatPeriod(item)} · {item.workMode}</small></div></li>)}</ol><aside class="experience-note" data-reveal="right"><p class="section-kicker">Enfoque</p><strong>Diseñar también es ordenar decisiones.</strong><p>Mi experiencia combina lectura del contexto, claridad visual y capacidad de llevar cada propuesta a un resultado concreto.</p><div>{skills.slice(0, 4).map((skill: any) => <span>{skill.name}</span>)}</div></aside></div>
     </section>
 
     <section class="portfolio-section section-anchor" id="formacion" data-section="formacion">
-      <header class="section-heading">
-        <div>
-          <p class="section-kicker">04 / Formación</p>
-          <h2>Aprendizaje continuo,<br />entre producto y multimedia.</h2>
-        </div>
-        <p>Una base proyectual ampliada con diseño digital, tecnología, comunicación y docencia.</p>
-      </header>
-
-      <div class="background-grid">
-        <section class="education-board">
-          <h3>Educación</h3>
-          {education.map((item, index) => (
-            <article>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <div><h4>{item.title}</h4><p>{item.place}</p></div>
-              <small>{item.detail}</small>
-            </article>
-          ))}
-        </section>
-
-        <section class="certificate-board">
-          <h3>Certificaciones</h3>
-          <ul>
-            {certifications.map((item, index) => (
-              <li><Icon name="arrow" size={16} /><span>{item}</span><small>{String(index + 1).padStart(2, "0")}</small></li>
-            ))}
-          </ul>
-        </section>
-
-        <section class="interest-board">
-          <div>
-            <p class="section-kicker">Intereses</p>
-            <h3>Fuera de la pantalla</h3>
-          </div>
-          <div class="interest-grid">
-            {interests.map((item) => (
-              <span><Icon name={item.icon} size={20} />{item.label}</span>
-            ))}
-          </div>
-        </section>
-      </div>
+      <header class="section-heading" data-reveal><div><p class="section-kicker">04 / Formación</p><h2>{site.educationTitle}</h2></div><p>Una base proyectual ampliada con diseño digital, tecnología, comunicación y docencia.</p></header>
+      <div class="background-grid"><section class="education-board" data-reveal><h3>Educación</h3>{education.map((item: any, index: number) => <article><span>{String(index + 1).padStart(2, "0")}</span><div><h4>{item.title}</h4><p>{item.institution}</p></div><small>{[item.startDate && item.endDate ? `${item.startDate}—${item.endDate}` : item.startDate, item.description].filter(Boolean).join(" · ")}</small></article>)}</section><section class="certificate-board" data-reveal data-reveal-delay="1"><h3>Certificaciones</h3><ul>{certifications.map((item: any, index: number) => <li>{item.url ? <a href={item.url} target="_blank" rel="noreferrer"><Icon name="arrow" size={16} /><span>{item.title}</span><small>{item.issuer || String(index + 1).padStart(2, "0")}</small></a> : <><Icon name="arrow" size={16} /><span>{item.title}</span><small>{item.issuer || String(index + 1).padStart(2, "0")}</small></>}</li>)}</ul></section><section class="interest-board" data-reveal data-reveal-delay="2"><div><p class="section-kicker">Intereses</p><h3>Fuera de la pantalla</h3></div><div class="interest-grid">{interests.map((item: any) => <span><Icon name={item.icon} size={20} />{item.name}</span>)}</div></section></div>
     </section>
 
     <section class="contact-section section-anchor" id="contacto" data-section="contacto">
-      <div class="contact-section__heading">
-        <p class="section-kicker">05 / Contacto</p>
-        <h2>¿Construimos algo<br />claro y útil?</h2>
-      </div>
-
-      <div class="contact-section__body">
-        <p>Estoy interesado en oportunidades de UX/UI, producto y diseño multimedia donde pueda investigar, organizar y transformar información en experiencias comprensibles.</p>
-        <div class="contact-actions">
-          <a href={`mailto:${profile.email}`}><Icon name="mail" size={20} />{profile.email}<Icon name="arrow" size={18} /></a>
-          <a href={profile.linkedin} target="_blank" rel="noreferrer"><Icon name="linkedin" size={20} />LinkedIn<Icon name="arrow" size={18} /></a>
-          <a href={`tel:${profile.phoneHref}`}><Icon name="phone" size={20} />{profile.phone}<Icon name="arrow" size={18} /></a>
-        </div>
-      </div>
+      <div class="contact-orbit" aria-hidden="true"><span>Disponible</span><i></i></div>
+      <div class="contact-section__heading" data-reveal><p class="section-kicker">05 / Contacto</p><h2>{site.contactTitle}</h2></div>
+      <div class="contact-section__body" data-reveal data-reveal-delay="1"><p>{site.contactBody}</p><div class="contact-actions"><a href={`mailto:${profile.email}`}><Icon name="mail" size={20} /><span>{profile.email}</span><Icon name="arrow" size={18} /></a><a href={profile.linkedin} target="_blank" rel="noreferrer"><Icon name="linkedin" size={20} /><span>LinkedIn</span><Icon name="arrow" size={18} /></a>{profile.github && <a href={profile.github} target="_blank" rel="noreferrer"><Icon name="code" size={20} /><span>GitHub</span><Icon name="arrow" size={18} /></a>}<a href={`tel:${profile.phoneHref}`}><Icon name="phone" size={20} /><span>{profile.phone}</span><Icon name="arrow" size={18} /></a></div></div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <p>© 2026 Tobías Mislej</p>
-    <p>Portfolio UX/UI & Multimedia</p>
-    <span class="site-footer__links"><a href="/admin">Administrar</a><a href="#inicio">Volver arriba ↑</a></span>
-  </footer>
-
-  <script>
-    import "../scripts/page.js";
-  </script>
+  <footer class="site-footer"><p>© 2026 Tobías Mislej</p><p>{site.footerNote}</p><span class="site-footer__links"><a href="/admin">Administrar</a><a href="#inicio">Volver arriba ↑</a></span></footer>
+  <script>import "../scripts/page.js";</script>
 </BaseLayout>

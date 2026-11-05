@@ -13,13 +13,14 @@ const categories = [...new Set(projects.map((project) => project.category))];
 ---
 
 <BaseLayout title="Todos los trabajos — Tobías Mislej" description="Archivo de proyectos de UX/UI, identidad y producto de Tobías Mislej.">
+  <div class="page-progress" aria-hidden="true"><i data-page-progress></i></div>
   <header class="archive-topbar">
     <a class="wordmark" href="/" aria-label="Volver al portfolio"><span>TM</span><strong>Tobías Mislej</strong></a>
     <a href="/">← Volver al portfolio</a>
   </header>
 
   <main id="contenido" class="archive-page">
-    <header class="archive-hero">
+    <header class="archive-hero" data-reveal>
       <p class="section-kicker">Archivo / {String(projects.length).padStart(2, "0")} casos</p>
       <h1>Todos los<br /><em>trabajos.</em></h1>
       <div><p>Proyectos personales, académicos y profesionales organizados para explorar cada caso con más profundidad.</p><span>{categories.join(" · ")}</span></div>
@@ -27,10 +28,10 @@ const categories = [...new Set(projects.map((project) => project.category))];
 
     <section class="archive-grid" aria-label="Listado de proyectos">
       {projects.map((project) => (
-        <article class="archive-card">
+        <article class="archive-card" style={`--project-accent:${project.accent || "#3151ff"}`} data-reveal>
           <a href={`/trabajos/${project.slug}`}>
             <ProjectGallery project={project} compact />
-            <span class="archive-card__index">{project.number} / {project.category}</span>
+            <span class="archive-card__index">{project.number} / {project.category}<i>{project.year || "2026"}</i></span>
             <span class="archive-card__body">
               <span><strong>{project.title}</strong><small>{project.subtitle}</small></span>
               <Icon name="arrow" size={22} />

@@ -19,12 +19,13 @@ const resources = [
 ---
 
 <BaseLayout title={`${project.title} — Tobías Mislej`} description={project.summary}>
+  <div class="page-progress" aria-hidden="true"><i data-page-progress></i></div>
   <header class="archive-topbar">
     <a class="wordmark" href="/" aria-label="Volver al portfolio"><span>TM</span><strong>Tobías Mislej</strong></a>
     <a href="/trabajos">← Todos los trabajos</a>
   </header>
 
-  <main id="contenido" class="case-page">
+  <main id="contenido" class="case-page" style={`--project-accent:${project.accent || "#3151ff"}`}>
     <header class="case-hero">
       <div class="case-hero__copy">
         <p class="section-kicker">{number} / {project.category}</p>
@@ -32,15 +33,20 @@ const resources = [
         <strong>{project.subtitle}</strong>
         <p>{project.description}</p>
       </div>
-      <ProjectGallery project={project} eager />
+      <ProjectGallery project={project} eager controls />
     </header>
 
     <section class="case-meta" aria-label="Ficha del proyecto">
       <div><span>Tipo</span><strong>{project.projectType}</strong></div>
       <div><span>Estado</span><strong>{project.status}</strong></div>
+      <div><span>Año</span><strong>{project.year || "2026"}</strong></div>
       <div><span>Rol</span><strong>{project.role || "Diseño integral"}</strong></div>
       <div><span>Herramientas</span><strong>{project.tools.join(" · ")}</strong></div>
     </section>
+
+    {project.deliverables?.length > 0 && (
+      <section class="case-deliverables"><p class="section-kicker">Entregables</p><div>{project.deliverables.map((item: string, index: number) => <span><i>{String(index + 1).padStart(2, "0")}</i>{item}</span>)}</div></section>
+    )}
 
     <section class="case-story">
       <article><span>01</span><h2>Desafío</h2><p>{project.challenge}</p></article>

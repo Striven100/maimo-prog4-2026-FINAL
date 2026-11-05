@@ -18,7 +18,8 @@ const genericSections: any[] = [
     fields: [
       { name: "name", label: "Habilidad", required: true },
       { name: "category", label: "Categoría" },
-      { name: "level", label: "Nivel" }
+      { name: "level", label: "Nivel" },
+      { name: "description", label: "Descripción", multiline: true }
     ]
   },
   {
@@ -29,7 +30,8 @@ const genericSections: any[] = [
       { name: "name", label: "Herramienta", required: true },
       { name: "category", label: "Categoría" },
       { name: "level", label: "Nivel" },
-      { name: "icon", label: "Ícono", placeholder: "figma, code, image…" }
+      { name: "icon", label: "Ícono", placeholder: "figma, code, image…" },
+      { name: "url", label: "Enlace", type: "url" }
     ]
   },
   {
@@ -39,7 +41,8 @@ const genericSections: any[] = [
     fields: [
       { name: "name", label: "Servicio", required: true },
       { name: "category", label: "Categoría" },
-      { name: "icon", label: "Ícono", placeholder: "bezier, search, code…" }
+      { name: "icon", label: "Ícono", placeholder: "bezier, search, code…" },
+      { name: "description", label: "Descripción", multiline: true }
     ]
   },
   {
@@ -72,7 +75,8 @@ const genericSections: any[] = [
     description: "Afinidades que completan tu perfil.",
     fields: [
       { name: "name", label: "Interés", required: true },
-      { name: "icon", label: "Ícono", placeholder: "book, headphones, dice…" }
+      { name: "icon", label: "Ícono", placeholder: "book, headphones, dice…" },
+      { name: "description", label: "Descripción", multiline: true }
     ]
   }
 ];
@@ -87,11 +91,12 @@ function recordTitle(record: any) {
     <aside class="admin-sidebar">
       <a class="admin-brand" href="/" aria-label="Ver portfolio">
         <span>TM</span>
-        <div><strong>Portfolio OS</strong><small>02 / API funcional</small></div>
+        <div><strong>Portfolio Studio</strong><small>03 / Experiencia editorial</small></div>
       </a>
 
       <nav class="admin-nav" aria-label="Secciones de administración">
         <button type="button" class="is-active" data-admin-tab="summary"><Icon name="chart" size={19} />Resumen</button>
+        <button type="button" data-admin-tab="site"><Icon name="palette" size={19} />Página y textos</button>
         <button type="button" data-admin-tab="projects"><Icon name="layers" size={19} />Proyectos <span>{database.projects.length}</span></button>
         <button type="button" data-admin-tab="experiences"><Icon name="briefcase" size={19} />Experiencia <span>{database.experiences.length}</span></button>
         <button type="button" data-admin-tab="content"><Icon name="grid" size={19} />Otros datos</button>
@@ -115,14 +120,14 @@ function recordTitle(record: any) {
       <section class="admin-view is-active" data-admin-view="summary">
         <header class="admin-page-heading">
           <div><p>Panel de contenido</p><h1>Todo lo importante,<br />en un solo lugar.</h1></div>
-          <p>Administrá el contenido que alimenta el portfolio público. {storage.configured ? "Los cambios se guardan de forma persistente en Vercel Blob." : "En desarrollo, los cambios se guardan en data/portfolio.json."}</p>
+          <p>Administrá la narrativa, los proyectos y cada categoría del portfolio. {storage.configured ? "Los cambios se guardan de forma persistente en Vercel Blob." : "En desarrollo, los cambios se guardan en data/portfolio.json."}</p>
         </header>
 
         <div class="admin-stats">
           <article><span>01</span><strong>{database.projects.length}</strong><p>Proyectos</p><button type="button" data-go-tab="projects">Gestionar →</button></article>
           <article><span>02</span><strong>{database.experiences.length}</strong><p>Experiencias</p><button type="button" data-go-tab="experiences">Gestionar →</button></article>
           <article><span>03</span><strong>{database.skills.length + database.tools.length}</strong><p>Skills + tools</p><button type="button" data-go-tab="content">Gestionar →</button></article>
-          <article><span>04</span><strong>{database.certifications.length + database.education.length}</strong><p>Formaciones</p><button type="button" data-go-tab="content">Gestionar →</button></article>
+          <article><span>04</span><strong>12</strong><p>Bloques editables</p><button type="button" data-go-tab="site">Gestionar →</button></article>
         </div>
 
         <div class="admin-overview-grid">
@@ -141,6 +146,53 @@ function recordTitle(record: any) {
             <p>{storage.configured ? "La información, las imágenes y los PDF se conservan entre despliegues y quedan disponibles inmediatamente en el portfolio público." : "Conectá un Blob público al proyecto de Vercel para habilitar la edición persistente desde esta página."}</p>
             <a href="/api/health" target="_blank">Comprobar API →</a>
           </aside>
+        </div>
+      </section>
+
+      <section class="admin-view" data-admin-view="site" hidden>
+        <header class="admin-page-heading admin-page-heading--compact">
+          <div><p>Dirección editorial</p><h1>Página y textos</h1></div>
+          <p>Editá los títulos, la presentación y el cierre sin tocar componentes ni código.</p>
+        </header>
+
+        <div class="admin-dual-forms admin-dual-forms--site">
+          <form class="admin-form" data-site-form>
+            <div class="admin-form__heading"><div><span>Portada</span><h2>Narrativa principal</h2></div><a href="/#inicio" target="_blank">Vista previa ↗</a></div>
+            <fieldset>
+              <label class="span-2">Etiqueta superior<input name="eyebrow" value={database.site?.eyebrow} /></label>
+              <label class="span-2">Título principal<input name="heroLine" required value={database.site?.heroLine} /></label>
+              <label class="span-2">Título destacado<input name="heroAccent" required value={database.site?.heroAccent} /></label>
+              <label class="span-2">Especialidades<textarea name="specialties" rows="5">{database.site?.specialties?.join("\n")}</textarea><small>Una por línea.</small></label>
+            </fieldset>
+            <fieldset>
+              <legend>Secciones</legend>
+              <label class="span-2">Título de proyectos<textarea name="projectsTitle" required rows="3">{database.site?.projectsTitle}</textarea></label>
+              <label class="span-2">Introducción de proyectos<textarea name="projectsIntro" rows="3">{database.site?.projectsIntro}</textarea></label>
+              <label class="span-2">Título de capacidades<textarea name="capabilitiesTitle" required rows="3">{database.site?.capabilitiesTitle}</textarea></label>
+              <label class="span-2">Título de experiencia<textarea name="experienceTitle" required rows="3">{database.site?.experienceTitle}</textarea></label>
+              <label class="span-2">Título de formación<textarea name="educationTitle" required rows="3">{database.site?.educationTitle}</textarea></label>
+            </fieldset>
+            <div class="admin-form__footer"><button type="submit" class="button-primary">Guardar narrativa <Icon name="arrow" size={18} /></button></div>
+          </form>
+
+          <form class="admin-form" data-site-contact-form>
+            <div class="admin-form__heading"><div><span>Cierre</span><h2>Llamado a contacto</h2></div></div>
+            <fieldset>
+              <label class="span-2">Título de contacto<textarea name="contactTitle" required rows="3">{database.site?.contactTitle}</textarea></label>
+              <label class="span-2">Texto de contacto<textarea name="contactBody" rows="6">{database.site?.contactBody}</textarea></label>
+              <label class="span-2">Texto del pie<input name="footerNote" value={database.site?.footerNote} /></label>
+            </fieldset>
+            <input type="hidden" name="eyebrow" value={database.site?.eyebrow} />
+            <input type="hidden" name="heroLine" value={database.site?.heroLine} />
+            <input type="hidden" name="heroAccent" value={database.site?.heroAccent} />
+            <input type="hidden" name="specialties" value={database.site?.specialties?.join("\n")} />
+            <input type="hidden" name="projectsTitle" value={database.site?.projectsTitle} />
+            <input type="hidden" name="projectsIntro" value={database.site?.projectsIntro} />
+            <input type="hidden" name="capabilitiesTitle" value={database.site?.capabilitiesTitle} />
+            <input type="hidden" name="experienceTitle" value={database.site?.experienceTitle} />
+            <input type="hidden" name="educationTitle" value={database.site?.educationTitle} />
+            <div class="admin-form__footer"><button type="submit" class="button-primary">Guardar cierre <Icon name="arrow" size={18} /></button></div>
+          </form>
         </div>
       </section>
 
@@ -175,6 +227,8 @@ function recordTitle(record: any) {
               <label>Categoría<input name="category" required placeholder="UX/UI + Identidad" /></label>
               <label>Tipo<select name="projectType"><option>Proyecto personal</option><option>Proyecto profesional</option><option>Proyecto académico</option><option>Proyecto conceptual</option></select></label>
               <label>Estado<select name="status"><option>Finalizado</option><option>En progreso</option><option>En revisión</option></select></label>
+              <label>Año<input name="year" inputmode="numeric" placeholder="2026" /></label>
+              <label>Color de acento<input type="color" name="accent" value="#3151ff" /></label>
               <label>Orden<input type="number" name="order" min="1" value="99" /></label>
             </fieldset>
             <fieldset>
@@ -189,6 +243,7 @@ function recordTitle(record: any) {
             <fieldset>
               <legend>03 · Clasificación y enlaces</legend>
               <label>Herramientas<textarea name="tools" rows="4" placeholder="Una por línea o separadas por coma"></textarea></label>
+              <label>Entregables<textarea name="deliverables" rows="4" placeholder="Arquitectura, prototipo, sistema visual…"></textarea></label>
               <label>Etiquetas<textarea name="tags" rows="4" placeholder="ux, branding, producto"></textarea></label>
               <label>URL publicada<input type="url" name="liveUrl" placeholder="https://…" /></label>
               <label>Repositorio<input type="url" name="repositoryUrl" placeholder="https://github.com/…" /></label>
@@ -200,7 +255,14 @@ function recordTitle(record: any) {
               <label class="admin-file-field span-2"><span>Galería</span><input type="file" name="galleryImages" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" multiple /><small>Podés seleccionar varias imágenes; se añadirán a las existentes.</small></label>
               <label class="span-2">Descripción accesible de las imágenes<input name="galleryAlt" placeholder="Ej. Pantallas responsive del sistema de turnos" /></label>
               <label class="admin-file-field span-2"><span>Documentos PDF</span><input type="file" name="pdfFiles" accept="application/pdf" multiple /><small>Presentaciones o casos completos · máximo 4 MB cada uno.</small></label>
-              <div class="admin-existing-files span-2" data-project-files hidden></div>
+              <input type="hidden" name="existingGallery" value="[]" data-existing-gallery />
+              <input type="hidden" name="existingPdfs" value="[]" data-existing-pdfs />
+              <div class="admin-media-manager span-2" data-project-files hidden>
+                <div class="admin-media-manager__heading"><div><strong>Archivos actuales</strong><small>Reordená, editá el texto alternativo o quitá archivos.</small></div></div>
+                <div class="admin-media-group" data-gallery-manager></div>
+                <div class="admin-media-group" data-pdf-manager></div>
+                <label class="admin-check" data-cover-remove hidden><input type="checkbox" name="removeCoverImage" /><span><strong>Quitar portada actual</strong><small>Podés cargar una nueva en el mismo guardado.</small></span></label>
+              </div>
             </fieldset>
             <fieldset class="admin-form__settings">
               <legend>05 · Publicación</legend>
@@ -312,13 +374,15 @@ function recordTitle(record: any) {
         </header>
 
         <div class="admin-dual-forms">
-          <form class="admin-form" data-profile-form>
+          <form class="admin-form" data-profile-form enctype="multipart/form-data">
             <div class="admin-form__heading"><div><span>Identidad</span><h2>Perfil profesional</h2></div></div>
             <fieldset>
               <label>Nombre<input name="name" required value={database.profile.name} /></label>
               <label>Rol profesional<input name="role" required value={database.profile.role} /></label>
               <label class="span-2">Estado<input name="status" value={database.profile.status} /></label>
               <label class="span-2">Sobre mí<textarea name="about" required rows="8">{database.profile.about}</textarea></label>
+              <label class="admin-file-field span-2"><span>Retrato o imagen de perfil</span><input type="file" name="portraitImage" accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml" /><small>Opcional · máximo 4 MB. Si queda vacío se usa el monograma.</small></label>
+              {database.profile.portraitImage && <label class="admin-check span-2"><input type="checkbox" name="removePortraitImage" /><span><strong>Quitar imagen actual</strong><small>Volver a mostrar el monograma tipográfico.</small></span></label>}
             </fieldset>
             <div class="admin-form__footer"><button type="submit" class="button-primary">Guardar perfil <Icon name="arrow" size={18} /></button></div>
           </form>
@@ -330,6 +394,8 @@ function recordTitle(record: any) {
               <label>Teléfono visible<input name="phone" value={database.contact.phone} /></label>
               <label>Teléfono para enlace<input name="phoneHref" value={database.contact.phoneHref} /></label>
               <label>LinkedIn<input type="url" name="linkedin" value={database.contact.linkedin} /></label>
+              <label>GitHub<input type="url" name="github" value={database.contact.github} /></label>
+              <label>Behance<input type="url" name="behance" value={database.contact.behance} /></label>
               <label>Ubicación<input name="location" value={database.contact.location} /></label>
               <label>Disponibilidad<input name="availability" value={database.contact.availability} /></label>
             </fieldset>

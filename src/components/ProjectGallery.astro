@@ -1,7 +1,7 @@
 ---
 import ProjectArtwork from "./ProjectArtwork.astro";
 
-const { project, compact = false, eager = false } = Astro.props;
+const { project, compact = false, eager = false, controls = false } = Astro.props;
 const frames = project.gallery?.length
   ? project.gallery
   : project.coverImage
@@ -9,7 +9,7 @@ const frames = project.gallery?.length
     : [];
 ---
 
-<div class:list={["project-gallery", { "project-gallery--compact": compact }]} data-project-gallery>
+<div class:list={["project-gallery", { "project-gallery--compact": compact, "project-gallery--controlled": controls }]} data-project-gallery data-autoplay={controls ? "false" : "true"}>
   {frames.length > 0 ? (
     <>
       {frames.map((frame: any, index: number) => (
@@ -18,17 +18,13 @@ const frames = project.gallery?.length
           alt={frame.alt || `Vista ${index + 1} de ${project.title}`}
           class:list={["project-gallery__frame", { "is-active": index === 0 }]}
           data-gallery-frame
+          data-gallery-index={index}
           loading={eager && index === 0 ? "eager" : "lazy"}
           decoding="async"
         />
       ))}
-      {frames.length > 1 && (
-        <span class="project-gallery__counter" aria-hidden="true">
-          <b data-gallery-current>01</b> / {String(frames.length).padStart(2, "0")}
-        </span>
-      )}
+      {frames.length > 1 && <span class="project-gallery__counter" aria-live="polite"><b data-gallery-current>01</b> / {String(frames.length).padStart(2, "0")}</span>}
+      {controls && frames.length > 1 && <div class="project-gallery__controls"><button type="button" data-gallery-prev aria-label="Imagen anterior">←</button><button type="button" data-gallery-next aria-label="Imagen siguiente">→</button></div>}
     </>
-  ) : (
-    <ProjectArtwork project={project} compact={compact} />
-  )}
+  ) : <ProjectArtwork project={project} compact={compact} />}
 </div>

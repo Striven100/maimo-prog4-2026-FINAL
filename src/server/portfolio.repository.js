@@ -38,6 +38,7 @@ export async function getPublicPortfolio() {
   const visible = (items) => byOrder(items).filter((item) => item.visible !== false);
   return {
     meta: database.meta,
+    site: database.site ?? {},
     profile: database.profile,
     contact: database.contact,
     projects: visible(database.projects),
@@ -131,7 +132,7 @@ export async function deleteRecord(section, id) {
 }
 
 export async function updateSingleton(section, input) {
-  if (!new Set(["profile", "contact"]).has(section)) {
+  if (!new Set(["site", "profile", "contact"]).has(section)) {
     throw new ApiError(404, "La sección solicitada no existe.");
   }
   return queueMutation(async () => {

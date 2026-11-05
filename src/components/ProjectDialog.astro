@@ -1,63 +1,36 @@
 ---
 import Icon from "./Icon.astro";
 import ProjectGallery from "./ProjectGallery.astro";
-
 const { project } = Astro.props;
 ---
 
-<dialog class="project-dialog" id={`project-${project.id}`} data-project-dialog>
+<dialog class="project-dialog" id={`project-${project.id}`} data-project-dialog style={`--project-accent:${project.accent || "#3151ff"}`}>
   <div class="project-dialog__frame">
     <header class="project-dialog__topbar">
-      <div>
-        <span>{project.number}</span>
-        <strong>{project.projectType}</strong>
-      </div>
-      <button type="button" class="icon-button" data-dialog-close aria-label={`Cerrar detalle de ${project.title}`}>
-        <Icon name="close" size={22} />
-      </button>
+      <div><span>{project.number}</span><strong>{project.projectType}</strong><small>{project.year || "2026"} · {project.status}</small></div>
+      <button type="button" class="icon-button" data-dialog-close aria-label={`Cerrar detalle de ${project.title}`}><Icon name="close" size={22} /></button>
     </header>
-
     <div class="project-dialog__scroll">
       <section class="project-dialog__hero">
         <div class="project-dialog__intro">
-          <p>{project.category}</p>
-          <h2>{project.title}</h2>
-          <strong>{project.subtitle}</strong>
-          <p>{project.description}</p>
+          <p>{project.category}</p><h2>{project.title}</h2><strong>{project.subtitle}</strong><p>{project.description}</p>
+          <div class="project-dialog__tags">{project.tags?.map((tag: string) => <span>{tag}</span>)}</div>
         </div>
-        <ProjectGallery project={project} />
+        <ProjectGallery project={project} eager controls />
       </section>
-
       <section class="project-dialog__facts" aria-label="Información del proyecto">
-        <article>
-          <span>01</span>
-          <h3>Desafío</h3>
-          <p>{project.challenge}</p>
-        </article>
-        <article>
-          <span>02</span>
-          <h3>Enfoque</h3>
-          <p>{project.process || project.role}</p>
-        </article>
-        <article>
-          <span>03</span>
-          <h3>Resultado</h3>
-          <p>{project.result}</p>
-        </article>
+        <article><span>01</span><h3>Desafío</h3><p>{project.challenge || "Problema y contexto del proyecto."}</p></article>
+        <article><span>02</span><h3>Proceso</h3><p>{project.process || project.role}</p></article>
+        <article><span>03</span><h3>Resultado</h3><p>{project.result || "Resultado y aprendizaje principal."}</p></article>
       </section>
-
       <section class="project-dialog__system">
-        <div>
-          <p class="section-kicker">Sistema visual</p>
-          <h3>Herramientas y enlaces</h3>
-        </div>
-        <ul class="dialog-tools">
-          {project.tools.map((tool: string) => <li>{tool}</li>)}
-        </ul>
+        <div><p class="section-kicker">Sistema del proyecto</p><h3>Rol, herramientas y entregables.</h3><p>{project.role}</p></div>
+        <div><strong class="dialog-list-title">Herramientas</strong><ul class="dialog-tools">{project.tools.map((tool: string) => <li>{tool}</li>)}</ul></div>
+        <div><strong class="dialog-list-title">Entregables</strong><ul class="dialog-tools">{(project.deliverables || []).map((item: string) => <li>{item}</li>)}</ul></div>
         <div class="project-dialog__resources">
           {project.links?.live && <a href={project.links.live} target="_blank" rel="noreferrer">Ver proyecto <Icon name="arrow" size={16} /></a>}
           {project.links?.caseStudy && <a href={project.links.caseStudy} target="_blank" rel="noreferrer">Caso completo <Icon name="arrow" size={16} /></a>}
-          {project.links?.repository && <a href={project.links.repository} target="_blank" rel="noreferrer">Repositorio <Icon name="arrow" size={16} /></a>}
+          {project.links?.repository && <a href={project.links.repository} target="_blank" rel="noreferrer">Repositorio <Icon name="code" size={16} /></a>}
           {project.pdfs?.map((pdf: any) => <a href={pdf.url} target="_blank" rel="noreferrer">{pdf.title || pdf.name} · PDF <Icon name="file" size={16} /></a>)}
           <a href={`/trabajos/${project.slug}`}>Abrir página del proyecto <Icon name="arrow" size={16} /></a>
         </div>
@@ -65,4 +38,3 @@ const { project } = Astro.props;
     </div>
   </div>
 </dialog>
-

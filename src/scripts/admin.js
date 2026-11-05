@@ -83,6 +83,97 @@ function focusForm(form) {
 }
 
 const projectForm = document.querySelector("[data-project-form]");
+let projectMedia = { gallery: [], pdfs: [], coverImage: "" };
+
+function syncProjectMedia() {
+  if (!projectForm) return;
+  setValue(projectForm, "existingGallery", JSON.stringify(projectMedia.gallery));
+  setValue(projectForm, "existingPdfs", JSON.stringify(projectMedia.pdfs));
+}
+
+function moveMedia(kind, index, direction) {
+  const list = projectMedia[kind];
+  const nextIndex = index + direction;
+  if (!list?.[index] || nextIndex < 0 || nextIndex >= list.length) return;
+  [list[index], list[nextIndex]] = [list[nextIndex], list[index]];
+  renderProjectMedia();
+}
+
+function mediaRow(item, index, kind) {
+  const row = document.createElement("article");
+  row.className = "admin-media-item";
+
+  const preview = document.createElement(kind === "gallery" ? "img" : "span");
+  if (preview instanceof HTMLImageElement) {
+    preview.src = item.url;
+    preview.alt = "";
+  } else {
+    preview.textContent = "PDF";
+  }
+
+  const field = document.createElement("label");
+  field.textContent = kind === "gallery" ? "Texto alternativo" : "Título";
+  const input = document.createElement("input");
+  input.value = kind === "gallery" ? (item.alt || "") : (item.title || item.name || "");
+  input.addEventListener("input", () => {
+    projectMedia[kind][index][kind === "gallery" ? "alt" : "title"] = input.value;
+    syncProjectMedia();
+  });
+  field.append(input);
+
+  const actions = document.createElement("div");
+  actions.className = "admin-media-item__actions";
+  [
+    ["↑", -1, "Subir"],
+    ["↓", 1, "Bajar"]
+  ].forEach(([symbol, direction, label]) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = symbol;
+    button.title = label;
+    button.disabled = direction === -1 ? index === 0 : index === projectMedia[kind].length - 1;
+    button.addEventListener("click", () => moveMedia(kind, index, direction));
+    actions.append(button);
+  });
+  const remove = document.createElement("button");
+  remove.type = "button";
+  remove.className = "is-danger";
+  remove.textContent = "Quitar";
+  remove.addEventListener("click", () => {
+    projectMedia[kind].splice(index, 1);
+    renderProjectMedia();
+  });
+  actions.append(remove);
+
+  row.append(preview, field, actions);
+  return row;
+}
+
+function renderMediaGroup(container, kind, label) {
+  if (!container) return;
+  container.replaceChildren();
+  const items = projectMedia[kind];
+  if (!items.length) return;
+  const title = document.createElement("strong");
+  title.textContent = `${label} · ${items.length}`;
+  container.append(title, ...items.map((item, index) => mediaRow(item, index, kind)));
+}
+
+function renderProjectMedia() {
+  if (!projectForm) return;
+  const files = projectForm.querySelector("[data-project-files]");
+  const coverRemove = projectForm.querySelector("[data-cover-remove]");
+  renderMediaGroup(projectForm.querySelector("[data-gallery-manager]"), "gallery", "Galería");
+  renderMediaGroup(projectForm.querySelector("[data-pdf-manager]"), "pdfs", "Documentos");
+  const hasMedia = Boolean(projectMedia.coverImage || projectMedia.gallery.length || projectMedia.pdfs.length);
+  files.hidden = !hasMedia;
+  coverRemove.hidden = !projectMedia.coverImage;
+  if (!projectMedia.coverImage) {
+    const checkbox = coverRemove.querySelector("input");
+    if (checkbox) checkbox.checked = false;
+  }
+  syncProjectMedia();
+}
 
 function resetProjectForm() {
   if (!projectForm) return;
@@ -93,9 +184,10 @@ function resetProjectForm() {
   projectForm.querySelector("[data-project-form-kicker]").textContent = "Nuevo proyecto";
   projectForm.querySelector("[data-project-form-title]").textContent = "Crear ficha";
   projectForm.querySelector("[data-submit-label]").textContent = "Guardar proyecto";
-  const files = projectForm.querySelector("[data-project-files]");
-  files.hidden = true;
-  files.textContent = "";
+  setValue(projectForm, "accent", "#3151ff");
+  setValue(projectForm, "year", new Date().getFullYear());
+  projectMedia = { gallery: [], pdfs: [], coverImage: "" };
+  renderProjectMedia();
 }
 
 document.querySelectorAll("[data-form-reset=project], [data-new-record=project]").forEach((button) => {
@@ -121,12 +213,12 @@ document.querySelectorAll("[data-edit-project]").forEach((button) => {
     projectForm.querySelector("[data-project-form-title]").textContent = project.title;
     projectForm.querySelector("[data-submit-label]").textContent = "Actualizar proyecto";
 
-    const files = projectForm.querySelector("[data-project-files]");
-    const fileCount = (project.gallery?.length || 0) + (project.pdfs?.length || 0);
-    files.hidden = fileCount === 0;
-    files.textContent = fileCount > 0
-      ? `Actualmente: ${project.gallery?.length || 0} imagen(es) y ${project.pdfs?.length || 0} PDF. Las nuevas cargas se añadirán a estos archivos.`
-      : "";
+    projectMedia = {
+      gallery: structuredClone(project.gallery || []),
+      pdfs: structuredClone(project.pdfs || []),
+      coverImage: project.coverImage || ""
+    };
+    renderProjectMedia();
     focusForm(projectForm);
   });
 });
@@ -305,9 +397,41 @@ async function submitSingleton(form, endpoint, successMessage) {
   }
 }
 
+document.querySelectorAll("[data-site-form], [data-site-contact-form]").forEach((form) => {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const body = { ...(portfolio.site || {}), ...formObject(form) };
+    try {
+      startBusy(form, true);
+      const payload = await apiFetch("/api/site", {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      portfolio.site = payload.data;
+      notify("Textos de la página actualizados correctamente.");
+      window.setTimeout(() => location.reload(), 650);
+    } catch (error) {
+      notify(error.message, "error");
+      startBusy(form, false);
+    }
+  });
+});
+
 document.querySelector("[data-profile-form]")?.addEventListener("submit", (event) => {
   event.preventDefault();
-  submitSingleton(event.currentTarget, "/api/profile", "Perfil actualizado correctamente.");
+  const form = event.currentTarget;
+  const body = new FormData(form);
+  startBusy(form, true);
+  apiFetch("/api/profile", { method: "PUT", body })
+    .then(() => {
+      notify("Perfil actualizado correctamente.");
+      window.setTimeout(() => location.reload(), 650);
+    })
+    .catch((error) => {
+      notify(error.message, "error");
+      startBusy(form, false);
+    });
 });
 document.querySelector("[data-contact-form]")?.addEventListener("submit", (event) => {
   event.preventDefault();

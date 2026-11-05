@@ -1,14 +1,16 @@
-# Portfolio de Tobías Mislej · etapa 02
+# Portfolio de Tobías Mislej · etapa 03
 
-Portfolio UX/UI construido con Astro y una API CRUD. La interfaz pública incluye una fila de proyectos con imágenes en transición, un archivo de trabajos y páginas de detalle. El panel privado `/admin` permite crear, ver, editar y eliminar contenido sin tocar el código, tanto en local como desde el sitio publicado en Vercel.
+Portfolio UX/UI construido con Astro, una API CRUD y una dirección visual editorial. La portada concentra toda la información, presenta los proyectos como casos interactivos y abre sus detalles en ventanas superpuestas. El panel privado `/admin` permite crear, ver, editar, ordenar y eliminar contenido sin tocar el código, tanto en local como desde el sitio publicado en Vercel.
 
 ## Funciones principales
 
-- Panel privado en `/admin` con navegación por categorías.
+- Experiencia visual de etapa 03 con transiciones, revelado progresivo, indicador de lectura y navegación activa.
+- Casos de proyecto en ventanas accesibles, con navegación por teclado, galerías manuales y enlaces profundos.
+- Panel privado en `/admin` con navegación por categorías y edición de la narrativa general de la página.
 - CRUD completo para proyectos y experiencia laboral.
-- Carga de portada, múltiples imágenes y documentos PDF.
+- Carga de portada, múltiples imágenes y documentos PDF, con reordenamiento, edición de textos alternativos y eliminación de archivos existentes.
 - Formulario de experiencia con puesto, empresa, tipo, modalidad, período, responsabilidades, logros y habilidades.
-- Gestión secundaria de skills, herramientas, servicios, certificados, educación, intereses, perfil y contacto.
+- Gestión secundaria de skills, herramientas, servicios, certificados, educación, intereses, perfil, retrato y contacto.
 - Fila horizontal de proyectos destacados con transición automática entre imágenes.
 - Página `/trabajos` con todos los casos y ruta `/trabajos/[slug]` para cada proyecto.
 - API pública filtrada en `/api/portfolio` y diagnóstico en `/api/health`.
@@ -66,6 +68,7 @@ Las imágenes aceptadas son JPG, PNG, WebP, GIF y SVG. Imágenes y PDF admiten h
 | `GET` / `PUT` / `DELETE` | `/api/content/:section/:id` | Gestionar un dato secundario |
 | `GET` / `PUT` | `/api/profile` | Ver o actualizar el perfil |
 | `GET` / `PUT` | `/api/contact` | Ver o actualizar el contacto |
+| `GET` / `PUT` | `/api/site` | Ver o actualizar títulos y narrativa global |
 
 Las secciones secundarias válidas son `skills`, `tools`, `services`, `certifications`, `education` e `interests`.
 
@@ -106,4 +109,4 @@ El proyecto usa salida de servidor y el adaptador oficial para Vercel. La compil
 
 ## Documentación adicional
 
-La arquitectura, las decisiones y el flujo de datos están explicados en [ETAPA_02_API.md](./ETAPA_02_API.md) y [ESTRUCTURA.md](./ESTRUCTURA.md).
+La arquitectura, las decisiones y el flujo de datos están explicados en [ETAPA_03_EXPERIENCIA.md](./ETAPA_03_EXPERIENCIA.md), [ETAPA_02_API.md](./ETAPA_02_API.md) y [ESTRUCTURA.md](./ESTRUCTURA.md).

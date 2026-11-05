@@ -1288,3 +1288,140 @@ select {
     padding: 2rem 1.2rem;
   }
 }
+
+/* Stage 03 · Portfolio Studio */
+.admin-form__heading > a {
+  color: var(--admin-muted);
+  text-transform: uppercase;
+  font-size: .56rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-underline-offset: .22rem;
+}
+
+.admin-form input[type="color"] {
+  min-height: 46px;
+  padding: .35rem;
+  cursor: pointer;
+}
+
+.admin-dual-forms--site {
+  align-items: start;
+}
+
+.admin-dual-forms--site .admin-form:first-child {
+  grid-column: span 1;
+}
+
+.admin-media-manager {
+  padding: 1rem;
+  display: grid;
+  gap: 1.2rem;
+  border: 1px solid var(--admin-ink);
+  background: #f1f2ed;
+}
+
+.admin-media-manager__heading > div {
+  display: grid;
+  gap: .25rem;
+}
+
+.admin-media-manager__heading strong {
+  font-size: .76rem;
+}
+
+.admin-media-manager__heading small {
+  color: var(--admin-muted);
+  font-size: .62rem;
+}
+
+.admin-media-group {
+  display: grid;
+  gap: .55rem;
+}
+
+.admin-media-group > strong {
+  color: var(--admin-blue);
+  text-transform: uppercase;
+  font-size: .56rem;
+  letter-spacing: .08em;
+}
+
+.admin-media-item {
+  padding: .65rem;
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: .75rem;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-panel);
+}
+
+.admin-media-item > img,
+.admin-media-item > span {
+  width: 72px;
+  height: 54px;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-dark);
+  color: var(--admin-lime);
+  font-size: .58rem;
+  font-weight: 900;
+}
+
+.admin-media-item > label {
+  gap: .3rem;
+}
+
+.admin-media-item > label input {
+  min-height: 38px;
+}
+
+.admin-media-item__actions {
+  display: flex;
+  gap: .35rem;
+}
+
+.admin-media-item__actions button {
+  min-width: 34px;
+  min-height: 34px;
+  padding: .45rem;
+  border: 1px solid var(--admin-ink);
+  background: transparent;
+  font-size: .58rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.admin-media-item__actions button:hover:not(:disabled) {
+  color: #fff;
+  background: var(--admin-dark);
+}
+
+.admin-media-item__actions button.is-danger:hover:not(:disabled) {
+  background: #9f2f29;
+}
+
+.admin-media-item__actions button:disabled {
+  opacity: .28;
+  cursor: default;
+}
+
+@media (max-width: 720px) {
+  .admin-media-item {
+    grid-template-columns: 58px 1fr;
+  }
+
+  .admin-media-item > img,
+  .admin-media-item > span {
+    width: 58px;
+    height: 48px;
+  }
+
+  .admin-media-item__actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+}
