@@ -1,10 +1,11 @@
 ---
 import Icon from "./Icon.astro";
 import ProjectGallery from "./ProjectGallery.astro";
+import CaseStudyPreview from "./CaseStudyPreview.astro";
 const { project } = Astro.props;
 ---
 
-<dialog class="project-dialog" id={`project-${project.id}`} data-project-dialog style={`--project-accent:${project.accent || "#3151ff"}`}>
+<dialog class="project-dialog" id={`project-${project.id}`} data-portfolio-dialog data-project-dialog style={`--project-accent:${project.accent || "#3151ff"}`}>
   <div class="project-dialog__frame">
     <header class="project-dialog__topbar">
       <div><span>{project.number}</span><strong>{project.projectType}</strong><small>{project.year || "2026"} · {project.status}</small></div>
@@ -23,6 +24,7 @@ const { project } = Astro.props;
         <article><span>02</span><h3>Proceso</h3><p>{project.process || project.role}</p></article>
         <article><span>03</span><h3>Resultado</h3><p>{project.result || "Resultado y aprendizaje principal."}</p></article>
       </section>
+      <CaseStudyPreview project={project} context="dialog" />
       <section class="project-dialog__system">
         <div><p class="section-kicker">Sistema del proyecto</p><h3>Rol, herramientas y entregables.</h3><p>{project.role}</p></div>
         <div><strong class="dialog-list-title">Herramientas</strong><ul class="dialog-tools">{project.tools.map((tool: string) => <li>{tool}</li>)}</ul></div>

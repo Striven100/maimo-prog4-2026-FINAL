@@ -49,6 +49,60 @@ async function readLocalDatabase() {
   }
 }
 
+function mergeCollection(remoteItems = [], bundledItems = []) {
+  const merged = remoteItems.map((item) => ({ ...item }));
+  const known = new Set(merged.map((item) => item.id));
+  bundledItems.forEach((item) => {
+    if (!known.has(item.id)) merged.push(item);
+  });
+  return merged;
+}
+
+export function mergeBundledRelease(remoteDatabase, bundledDatabase) {
+  const remoteVersion = Number(remoteDatabase?.meta?.schemaVersion || 0);
+  const bundledVersion = Number(bundledDatabase?.meta?.schemaVersion || 0);
+  if (remoteVersion >= bundledVersion) return remoteDatabase;
+
+  const remoteProjects = new Map((remoteDatabase.projects ?? []).map((project) => [project.id, project]));
+  const projects = [...(remoteDatabase.projects ?? [])].map((project) => ({ ...project }));
+
+  for (const bundledProject of bundledDatabase.projects ?? []) {
+    const current = remoteProjects.get(bundledProject.id);
+    if (!current) {
+      projects.push(bundledProject);
+      continue;
+    }
+    if (Number(bundledProject.releaseVersion || 0) > remoteVersion) {
+      const index = projects.findIndex((project) => project.id === bundledProject.id);
+      projects[index] = {
+        ...bundledProject,
+        ...current,
+        releaseVersion: bundledProject.releaseVersion,
+        coverImage: bundledProject.coverImage,
+        gallery: bundledProject.gallery,
+        pdfs: bundledProject.pdfs,
+        updatedAt: bundledProject.updatedAt
+      };
+    }
+  }
+
+  const collectionNames = ["experiences", "services", "skills", "tools", "certifications", "education", "interests"];
+  const mergedCollections = Object.fromEntries(
+    collectionNames.map((name) => [name, mergeCollection(remoteDatabase[name], bundledDatabase[name])])
+  );
+
+  return {
+    ...bundledDatabase,
+    ...remoteDatabase,
+    meta: { ...remoteDatabase.meta, ...bundledDatabase.meta },
+    site: { ...bundledDatabase.site, ...remoteDatabase.site },
+    profile: { ...bundledDatabase.profile, ...remoteDatabase.profile },
+    contact: { ...bundledDatabase.contact, ...remoteDatabase.contact },
+    projects,
+    ...mergedCollections
+  };
+}
+
 async function readBlobDatabase() {
   const result = await get(DATABASE_BLOB_PATH, {
     access: BLOB_ACCESS,
@@ -70,8 +124,9 @@ async function readBlobDatabase() {
 
 export async function readDatabaseState() {
   if (isBlobConfigured()) {
+    const bundled = await readLocalDatabase();
     const remote = await readBlobDatabase();
-    if (remote) return remote;
+    if (remote) return { ...remote, database: mergeBundledRelease(remote.database, bundled) };
   }
 
   return {

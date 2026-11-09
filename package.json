@@ -1,13 +1,15 @@
 {
   "name": "tobias-mislej-portfolio",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "node scripts/clean-build.mjs && astro check && astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "validate:content": "node scripts/validate-content.mjs",
+    "verify": "npm run validate:content && npm run build"
   },
   "dependencies": {
     "@astrojs/vercel": "^8.2.7",

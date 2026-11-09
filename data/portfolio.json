@@ -1,8 +1,8 @@
 {
   "meta": {
-    "stage": "03-experiencia-editorial",
-    "schemaVersion": 2,
-    "updatedAt": "2026-11-04T17:00:00.000Z"
+    "stage": "04-entrega-final",
+    "schemaVersion": 3,
+    "updatedAt": "2026-11-09T18:00:00.000Z"
   },
   "site": {
     "eyebrow": "Portfolio independiente / 2026",
@@ -202,6 +202,7 @@
     },
     {
       "id": "project-nara",
+      "releaseVersion": 3,
       "slug": "nara-plus",
       "title": "NARA+",
       "subtitle": "Salud y seguimiento personal",
@@ -231,18 +232,24 @@
         "branding",
         "salud"
       ],
-      "coverImage": "/demo/nara-01.svg",
+      "coverImage": "/projects/nara-plus/notebook.jpg",
       "gallery": [
         {
-          "url": "/demo/nara-01.svg",
-          "alt": "Identidad de NARA+"
+          "url": "/projects/nara-plus/mobile.jpg",
+          "alt": "Página completa para celular de NARA+, con turnos, plan de cuidado, equipo e identidad"
         },
         {
-          "url": "/demo/nara-02.svg",
-          "alt": "Panel de seguimiento de NARA+"
+          "url": "/projects/nara-plus/notebook.jpg",
+          "alt": "Página completa para notebook de NARA+, con panel de seguimiento y sistema visual"
         }
       ],
-      "pdfs": [],
+      "pdfs": [
+        {
+          "url": "/projects/nara-plus/caso-completo.pdf",
+          "name": "nara-plus-caso-completo.pdf",
+          "title": "NARA+ · caso completo"
+        }
+      ],
       "links": {
         "live": "",
         "repository": "",
@@ -252,7 +259,129 @@
       "visible": true,
       "order": 4,
       "createdAt": "2026-09-21T00:00:00.000Z",
-      "updatedAt": "2026-10-30T00:00:00.000Z"
+      "updatedAt": "2026-11-09T18:00:00.000Z"
+    },
+    {
+      "id": "project-abasto",
+      "releaseVersion": 3,
+      "slug": "abasto-red-04",
+      "title": "ABASTO",
+      "subtitle": "Red 04 · rescate y distribución de alimentos",
+      "category": "Producto + UX/UI",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "year": "2026",
+      "accent": "#2bd0d3",
+      "summary": "Centro operativo para coordinar rescates, inventario, vehículos y entregas de una red alimentaria.",
+      "description": "ABASTO Red 04 traduce una operación logística compleja en decisiones visibles: qué alimento necesita salir primero, qué vehículo puede retirarlo y qué organización lo necesita. El sistema combina lectura de urgencias, trazabilidad e impacto sin perder la dimensión humana del rescate.",
+      "role": "Arquitectura de información, diseño de producto, identidad visual y experiencia responsive.",
+      "challenge": "Organizar carga, ventanas horarias, cadena de frío y demanda real en una interfaz que permita actuar con rapidez y reduzca errores de coordinación.",
+      "process": "Se jerarquizó la operación en seis momentos —centro, prioridad, asignación, inventario, entregas e impacto— y se construyó un lenguaje visual de alto contraste inspirado en etiquetas, depósitos y señalización logística.",
+      "result": "Un tablero operativo que convierte datos dispersos en acciones claras y mantiene continuidad entre la vista móvil de campo y el centro de coordinación en notebook.",
+      "tools": [
+        "Figma",
+        "Arquitectura de información",
+        "Sistemas UI"
+      ],
+      "deliverables": [
+        "Dashboard operativo",
+        "Flujo de asignación",
+        "Sistema visual responsive"
+      ],
+      "tags": [
+        "ux",
+        "producto",
+        "branding"
+      ],
+      "coverImage": "/projects/abasto/notebook.jpg",
+      "gallery": [
+        {
+          "url": "/projects/abasto/mobile.jpg",
+          "alt": "Página completa para celular de ABASTO, con rescates prioritarios, inventario, entregas e impacto"
+        },
+        {
+          "url": "/projects/abasto/notebook.jpg",
+          "alt": "Página completa para notebook del centro operativo ABASTO Red 04"
+        }
+      ],
+      "pdfs": [
+        {
+          "url": "/projects/abasto/caso-completo.pdf",
+          "name": "abasto-red-04-caso-completo.pdf",
+          "title": "ABASTO Red 04 · caso completo"
+        }
+      ],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 5,
+      "createdAt": "2026-11-09T18:00:00.000Z",
+      "updatedAt": "2026-11-09T18:00:00.000Z"
+    },
+    {
+      "id": "project-frecuencia",
+      "releaseVersion": 3,
+      "slug": "frecuencia",
+      "title": "FRECUENCIA",
+      "subtitle": "Radio independiente y archivo musical",
+      "category": "Web + Identidad",
+      "projectType": "Proyecto conceptual",
+      "status": "Finalizado",
+      "year": "2026",
+      "accent": "#fff200",
+      "summary": "Experiencia editorial para escuchar radio, explorar archivos y descubrir música sin recomendaciones automáticas.",
+      "description": "FRECUENCIA es una radio independiente de Buenos Aires pensada como una señal que también se ve. La interfaz reúne transmisión en vivo, programación, sesiones, archivo y descubrimiento musical mediante una identidad intensa, directa y deliberadamente humana.",
+      "role": "Concepto de producto, arquitectura, dirección de arte y diseño responsive.",
+      "challenge": "Dar protagonismo a la curaduría y al descubrimiento sin reproducir la lógica visual ni los patrones de recomendación de una plataforma algorítmica.",
+      "process": "La experiencia se organizó como una revista musical en movimiento: una portada sonora, una grilla diaria, un archivo abierto y recorridos editoriales. El sistema combina tipografía condensada, colores primarios y composiciones de afiche.",
+      "result": "Una plataforma con personalidad propia que permite escuchar, volver a contenidos pasados y descubrir escenas nuevas con una navegación clara en celular y notebook.",
+      "tools": [
+        "Figma",
+        "Dirección de arte",
+        "UX Writing"
+      ],
+      "deliverables": [
+        "Arquitectura de contenidos",
+        "Identidad editorial",
+        "Prototipo responsive"
+      ],
+      "tags": [
+        "ux",
+        "branding",
+        "producto"
+      ],
+      "coverImage": "/projects/frecuencia/notebook.jpg",
+      "gallery": [
+        {
+          "url": "/projects/frecuencia/mobile.jpg",
+          "alt": "Página completa para celular de FRECUENCIA, con radio en vivo, archivo, descubrimiento e identidad"
+        },
+        {
+          "url": "/projects/frecuencia/notebook.jpg",
+          "alt": "Página completa para notebook de la radio independiente FRECUENCIA"
+        }
+      ],
+      "pdfs": [
+        {
+          "url": "/projects/frecuencia/caso-completo.pdf",
+          "name": "frecuencia-caso-completo.pdf",
+          "title": "FRECUENCIA · caso completo"
+        }
+      ],
+      "links": {
+        "live": "",
+        "repository": "",
+        "caseStudy": ""
+      },
+      "featured": true,
+      "visible": true,
+      "order": 6,
+      "createdAt": "2026-11-09T18:00:00.000Z",
+      "updatedAt": "2026-11-09T18:00:00.000Z"
     }
   ],
   "experiences": [

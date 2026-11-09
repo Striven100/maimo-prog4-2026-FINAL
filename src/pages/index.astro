@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Icon from "../components/Icon.astro";
 import ProjectGallery from "../components/ProjectGallery.astro";
 import ProjectDialog from "../components/ProjectDialog.astro";
+import InfoDialog from "../components/InfoDialog.astro";
 import { getPublicPortfolio } from "../server/portfolio.repository.js";
 import { hasAdminSession } from "../server/http.js";
 
@@ -55,6 +56,112 @@ const formatPeriod = (item: any) => {
   if (!item.startDate && !item.endDate) return item.current ? "Actualidad" : "Experiencia profesional";
   return [item.startDate, item.current ? "Actualidad" : item.endDate].filter(Boolean).join(" — ");
 };
+const profilePanels = [
+  {
+    id: "info-perfil",
+    index: "A1",
+    icon: "users",
+    eyebrow: "Perfil profesional",
+    title: "Diseño para volver simple lo complejo.",
+    lead: profile.about,
+    highlight: "Combino una mirada analítica con producción visual y capacidad para llevar las decisiones hasta una entrega concreta.",
+    tone: "blue",
+    facts: [
+      { label: "Rol", value: profile.role },
+      { label: "Ubicación", value: profile.location },
+      { label: "Estado", value: profile.availability },
+      { label: "Formación", value: education[0]?.title }
+    ],
+    groups: [
+      { title: "Especialidades", items: site.specialties },
+      { title: "Qué puedo aportar", items: services.slice(0, 4).map((item: any) => ({ label: item.name, detail: item.description || item.category })) }
+    ],
+    action: { text: "¿Tenés un desafío de producto, interfaz o comunicación?", label: "Escribirme", href: `mailto:${profile.email}` }
+  },
+  {
+    id: "info-metodo",
+    index: "A2",
+    icon: "route",
+    eyebrow: "Método de trabajo",
+    title: "Investigar, ordenar, diseñar y comprobar.",
+    lead: "Trabajo cada proyecto como un sistema: entiendo el contexto, jerarquizo la información, desarrollo una dirección visual y pruebo la solución en sus tamaños reales.",
+    highlight: "La estética aparece como consecuencia de una idea clara, no como una capa separada del problema.",
+    tone: "acid",
+    facts: [
+      { label: "Casos seleccionados", value: String(projects.length) },
+      { label: "Servicios", value: String(services.length) },
+      { label: "Herramientas", value: String(tools.length) },
+      { label: "Enfoque", value: "UX/UI + multimedia" }
+    ],
+    groups: [
+      { title: "Fortalezas", items: skills.map((item: any) => ({ label: item.name, detail: item.level })) },
+      { title: "Entorno de producción", items: tools.map((item: any) => ({ label: item.name, detail: `${item.category} · ${item.level}` })) }
+    ]
+  },
+  {
+    id: "info-trayectoria",
+    index: "A3",
+    icon: "briefcase",
+    eyebrow: "Trayectoria",
+    title: "Experiencia entre diseño, comunicación y educación.",
+    lead: "Mi recorrido reúne proyectos freelance, colaboración en equipos creativos, comunicación científica, organización educativa y acompañamiento académico.",
+    highlight: "Cada contexto reforzó una misma competencia: traducir necesidades diversas en información y acciones comprensibles.",
+    tone: "coral",
+    facts: [
+      { label: "Experiencias", value: String(experience.length) },
+      { label: "Formaciones", value: String(education.length) },
+      { label: "Certificaciones", value: String(certifications.length) },
+      { label: "Base", value: "Buenos Aires" }
+    ],
+    groups: [
+      { title: "Experiencia", items: experience.map((item: any) => ({ label: item.role, detail: item.company })) },
+      { title: "Educación", items: education.map((item: any) => ({ label: item.title, detail: item.institution })) }
+    ],
+    action: { text: "Podés abrir cada experiencia para ver responsabilidades y habilidades.", label: "Ir a experiencia", href: "#experiencia" }
+  },
+  {
+    id: "info-intereses",
+    index: "A4",
+    icon: "spark",
+    eyebrow: "Intereses y perspectiva",
+    title: "Curiosidad dentro y fuera de la pantalla.",
+    lead: "La lectura, la escritura, los relatos visuales y los espacios de juego alimentan mi forma de investigar, construir narrativas y pensar experiencias.",
+    highlight: "Busco equipos donde la curiosidad, el criterio y la colaboración tengan espacio para convertirse en mejores productos.",
+    tone: "violet",
+    facts: [
+      { label: "Ubicación", value: profile.location },
+      { label: "Disponibilidad", value: profile.availability },
+      { label: "Idioma del portfolio", value: "Español" },
+      { label: "Contacto", value: profile.email }
+    ],
+    groups: [
+      { title: "Intereses", items: interests.map((item: any) => ({ label: item.name, detail: item.description })) },
+      { title: "Áreas que exploro", items: site.specialties }
+    ],
+    action: { text: "También podés conocer mi actividad y contactarme por LinkedIn.", label: "Ver LinkedIn", href: profile.linkedin, external: true }
+  }
+];
+const experiencePanels = experience.map((item: any, index: number) => ({
+  id: `experience-${item.id}`,
+  index: String(index + 1).padStart(2, "0"),
+  eyebrow: item.company,
+  title: item.role,
+  lead: item.summary,
+  highlight: item.achievements?.[0] || "Una experiencia orientada a la comunicación clara, la organización y la colaboración.",
+  tone: index % 2 === 0 ? "blue" : "coral",
+  facts: [
+    { label: "Tipo", value: item.employmentType },
+    { label: "Modalidad", value: item.workMode },
+    { label: "Período", value: formatPeriod(item) },
+    { label: "Ubicación", value: item.location }
+  ],
+  groups: [
+    { title: "Responsabilidades", items: item.responsibilities || [] },
+    { title: "Logros", items: item.achievements || [] },
+    { title: "Habilidades aplicadas", items: item.skills || [] }
+  ],
+  action: item.companyUrl ? { text: "Más información sobre la organización.", label: "Visitar sitio", href: item.companyUrl, external: true } : undefined
+}));
 ---
 
 <BaseLayout>
@@ -89,10 +196,17 @@ const formatPeriod = (item: any) => {
         <p class="section-kicker" data-reveal>{site.eyebrow}</p>
         <h1 data-reveal data-reveal-delay="1">{site.heroLine}<br /><span>{site.heroAccent}</span></h1>
         <div class="intro__summary" data-reveal data-reveal-delay="2"><p>{profile.about}</p><div class="role-list" aria-label="Áreas de especialización">{site.specialties.map((item: string, index: number) => <span>{String(index + 1).padStart(2, "0")} · {item}</span>)}</div></div>
+        <div class="profile-dossier" data-reveal data-reveal-delay="3">
+          <p><span>Ficha personal</span> Abrí una sección para conocer mi perfil en profundidad.</p>
+          <div>
+            {profilePanels.map((panel) => <button type="button" data-dialog-open={panel.id}><Icon name={panel.icon} size={19} /><span><small>{panel.index}</small>{panel.eyebrow}</span><Icon name="arrow" size={16} /></button>)}
+          </div>
+        </div>
         <div class="intro__index" data-reveal data-reveal-delay="3"><a href="#proyectos"><strong>{String(projects.length).padStart(2, "0")}</strong><span>Casos<br />seleccionados</span></a><a href="#capacidades"><strong>{String(services.length).padStart(2, "0")}</strong><span>Servicios<br />y capacidades</span></a><a href="#experiencia"><strong>{String(experience.length).padStart(2, "0")}</strong><span>Experiencias<br />profesionales</span></a><a href="#formacion"><strong>{String(certifications.length).padStart(2, "0")}</strong><span>Certificaciones<br />destacadas</span></a></div>
       </div>
       <div class="kinetic-strip" aria-hidden="true"><div><span>UX/UI</span><i></i><span>Producto digital</span><i></i><span>Identidad visual</span><i></i><span>Investigación</span><i></i><span>UX/UI</span><i></i><span>Producto digital</span><i></i><span>Identidad visual</span><i></i><span>Investigación</span></div></div>
     </section>
+    {profilePanels.map((panel) => <InfoDialog panel={panel} />)}
 
     <section class="portfolio-section portfolio-section--dark section-anchor" id="proyectos" data-section="proyectos">
       <header class="section-heading section-heading--light" data-reveal><div><p class="section-kicker">01 / Trabajo seleccionado</p><h2>{site.projectsTitle}</h2></div><div class="section-heading__aside"><p>{site.projectsIntro}</p><a href="/trabajos">Explorar archivo completo <Icon name="arrow" size={16} /></a></div></header>
@@ -100,6 +214,7 @@ const formatPeriod = (item: any) => {
       <div class="project-grid project-rail" data-project-grid>
         {projects.map((project: any, index: number) => <article class="project-card" data-project-card data-project-tags={project.tags.join(" ")} style={`--project-accent:${project.accent || "#3151ff"}`} data-reveal data-reveal-delay={String(index % 2)}><button type="button" data-dialog-open={`project-${project.id}`} aria-label={`Ver proyecto ${project.title}`}><ProjectGallery project={project} compact /><span class="project-card__meta"><i>{project.number}</i><small>{project.category}</small><em>{project.year || "2026"}</em></span><span class="project-card__title"><strong>{project.title}</strong><small>{project.subtitle}</small></span><span class="project-card__summary">{project.summary}</span><span class="project-card__action">Abrir caso <Icon name="arrow" size={18} /></span></button></article>)}
       </div>
+      <p class="project-empty" data-project-empty hidden>No hay casos visibles con este filtro. Probá otra categoría.</p>
       {projects.map((project: any) => <ProjectDialog project={project} />)}
     </section>
 
@@ -111,7 +226,8 @@ const formatPeriod = (item: any) => {
 
     <section class="portfolio-section portfolio-section--tint section-anchor" id="experiencia" data-section="experiencia">
       <header class="section-heading" data-reveal><div><p class="section-kicker">03 / Experiencia</p><h2>{site.experienceTitle}</h2></div><p>Roles y colaboraciones donde la comunicación, la organización y la producción forman parte del diseño.</p></header>
-      <div class="experience-stage"><ol class="timeline-list">{experience.map((item: any, index: number) => <li data-reveal><span class="timeline-list__number">{String(index + 1).padStart(2, "0")}</span><span class="timeline-list__icon"><Icon name="briefcase" size={21} /></span><div><p>{item.company}</p><h3>{item.role}</h3><span>{item.summary}</span><small>{formatPeriod(item)} · {item.workMode}</small></div></li>)}</ol><aside class="experience-note" data-reveal="right"><p class="section-kicker">Enfoque</p><strong>Diseñar también es ordenar decisiones.</strong><p>Mi experiencia combina lectura del contexto, claridad visual y capacidad de llevar cada propuesta a un resultado concreto.</p><div>{skills.slice(0, 4).map((skill: any) => <span>{skill.name}</span>)}</div></aside></div>
+      <div class="experience-stage"><ol class="timeline-list">{experience.map((item: any, index: number) => <li data-reveal><button type="button" data-dialog-open={`experience-${item.id}`} aria-label={`Ver detalle de ${item.role} en ${item.company}`}><span class="timeline-list__number">{String(index + 1).padStart(2, "0")}</span><span class="timeline-list__icon"><Icon name="briefcase" size={21} /></span><span class="timeline-list__content"><span class="timeline-list__company">{item.company}</span><strong>{item.role}</strong><span>{item.summary}</span><small>{formatPeriod(item)} · {item.workMode}</small></span><span class="timeline-list__open">Ver detalle <Icon name="arrow" size={16} /></span></button></li>)}</ol><aside class="experience-note" data-reveal="right"><p class="section-kicker">Enfoque</p><strong>Diseñar también es ordenar decisiones.</strong><p>Mi experiencia combina lectura del contexto, claridad visual y capacidad de llevar cada propuesta a un resultado concreto.</p><div>{skills.slice(0, 4).map((skill: any) => <span>{skill.name}</span>)}</div></aside></div>
+      {experiencePanels.map((panel) => <InfoDialog panel={panel} />)}
     </section>
 
     <section class="portfolio-section section-anchor" id="formacion" data-section="formacion">

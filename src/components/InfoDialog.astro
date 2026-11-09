@@ -1,0 +1,66 @@
+---
+import Icon from "./Icon.astro";
+
+const { panel } = Astro.props;
+const titleId = `${panel.id}-title`;
+const groups = (panel.groups ?? []).filter((group: any) => group.items?.length);
+---
+
+<dialog
+  class:list={["info-dialog", `info-dialog--${panel.tone || "blue"}`]}
+  id={panel.id}
+  data-portfolio-dialog
+  aria-labelledby={titleId}
+>
+  <div class="info-dialog__frame">
+    <header class="info-dialog__topbar">
+      <div><span>{panel.index}</span><strong>{panel.eyebrow}</strong></div>
+      <button type="button" class="icon-button" data-dialog-close aria-label={`Cerrar ${panel.eyebrow}`}>
+        <Icon name="close" size={22} />
+      </button>
+    </header>
+
+    <div class="info-dialog__scroll">
+      <section class="info-dialog__hero">
+        <p>{panel.eyebrow}</p>
+        <h2 id={titleId}>{panel.title}</h2>
+        <p>{panel.lead}</p>
+        {panel.highlight && <strong>{panel.highlight}</strong>}
+      </section>
+
+      {panel.facts?.length > 0 && (
+        <dl class="info-dialog__facts">
+          {panel.facts.map((fact: any) => <div><dt>{fact.label}</dt><dd>{fact.value || "—"}</dd></div>)}
+        </dl>
+      )}
+
+      {groups.length > 0 && (
+        <section class="info-dialog__groups">
+          {groups.map((group: any, index: number) => (
+            <article>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <h3>{group.title}</h3>
+              <ul>
+                {group.items.map((item: any) => (
+                  <li>
+                    <strong>{typeof item === "string" ? item : item.label}</strong>
+                    {typeof item !== "string" && item.detail && <small>{item.detail}</small>}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </section>
+      )}
+
+      {panel.action && (
+        <footer class="info-dialog__action">
+          <p>{panel.action.text}</p>
+          <a href={panel.action.href} target={panel.action.external ? "_blank" : undefined} rel={panel.action.external ? "noreferrer" : undefined}>
+            {panel.action.label}<Icon name="arrow" size={18} />
+          </a>
+        </footer>
+      )}
+    </div>
+  </div>
+</dialog>

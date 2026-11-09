@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import ProjectGallery from "../../components/ProjectGallery.astro";
+import CaseStudyPreview from "../../components/CaseStudyPreview.astro";
 import Icon from "../../components/Icon.astro";
 import { getPublicPortfolio } from "../../server/portfolio.repository.js";
 
@@ -43,6 +44,8 @@ const resources = [
       <div><span>Rol</span><strong>{project.role || "Diseño integral"}</strong></div>
       <div><span>Herramientas</span><strong>{project.tools.join(" · ")}</strong></div>
     </section>
+
+    <CaseStudyPreview project={project} context="page" />
 
     {project.deliverables?.length > 0 && (
       <section class="case-deliverables"><p class="section-kicker">Entregables</p><div>{project.deliverables.map((item: string, index: number) => <span><i>{String(index + 1).padStart(2, "0")}</i>{item}</span>)}</div></section>

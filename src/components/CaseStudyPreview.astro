@@ -1,0 +1,60 @@
+---
+import Icon from "./Icon.astro";
+
+const { project, context = "page" } = Astro.props;
+const frames = (project.gallery ?? []).slice(0, 2);
+const enabled = frames.length >= 2 && (project.pdfs?.length ?? 0) > 0;
+const previewId = `case-preview-${context}-${project.id}`;
+const modes = [
+  { label: "Celular", short: "390 px" },
+  { label: "Notebook", short: "1440 px" }
+];
+---
+
+{enabled && (
+  <section class:list={["case-preview", `case-preview--${context}`]} data-case-preview>
+    <header class="case-preview__heading">
+      <div>
+        <p class="section-kicker">Interfaz completa</p>
+        <h3>Explorá el diseño en contexto.</h3>
+      </div>
+      <p>Alterná entre las versiones responsive y desplazate dentro de cada página.</p>
+    </header>
+
+    <div class="case-preview__toolbar">
+      <div role="tablist" aria-label={`Versiones de ${project.title}`}>
+        {frames.map((_: any, index: number) => (
+          <button
+            type="button"
+            role="tab"
+            id={`${previewId}-tab-${index}`}
+            aria-controls={`${previewId}-panel-${index}`}
+            aria-selected={index === 0 ? "true" : "false"}
+            data-case-tab={index}
+          >
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <strong>{modes[index]?.label || `Vista ${index + 1}`}</strong>
+            <small>{modes[index]?.short}</small>
+          </button>
+        ))}
+      </div>
+      <span class="case-preview__hint"><Icon name="motion" size={17} /> Desplazá para recorrer</span>
+    </div>
+
+    <div class="case-preview__viewport" data-case-viewport data-mode="mobile" tabindex="0" aria-label={`Vista desplazable de ${project.title}`}>
+      {frames.map((frame: any, index: number) => (
+        <div
+          class:list={["case-preview__frame", { "is-active": index === 0 }]}
+          id={`${previewId}-panel-${index}`}
+          role="tabpanel"
+          aria-labelledby={`${previewId}-tab-${index}`}
+          data-case-frame={index}
+          data-case-mode={index === 0 ? "mobile" : "notebook"}
+          hidden={index !== 0}
+        >
+          <img src={frame.url} alt={frame.alt || `${modes[index]?.label} de ${project.title}`} loading="lazy" decoding="async" />
+        </div>
+      ))}
+    </div>
+  </section>
+)}
